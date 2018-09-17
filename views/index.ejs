@@ -1,0 +1,273 @@
+<!doctype html>
+<html>
+
+<head>
+  <% include head.ejs %>
+</head>
+<script>
+  $(document).ready(function () {
+    $('.tabs').tabs();
+    $('select').formSelect();
+    initDatePicker();
+  });
+</script>
+
+<style>
+  .file-field .btn {
+    float: none;
+  }
+</style>
+
+<body>
+  <% include navbar.ejs %>
+    <div class="row wrapper">
+      <div class="col s12 l6 offset-l3 m8 offset-m2">
+        <ul id="tabs-swipe-demo" class="tabs">
+          <li class="tab col s3 m4">
+            <a class="active" href="#login">Logovanje</a>
+          </li>
+          <li class="tab col s3 m4">
+            <a href="#registration">Registracija</a>
+          </li>
+          <li class="tab col s3 m4">
+            <a href="#change-password">Promena lozinke</a>
+          </li>
+        </ul>
+        <div id="login" class="col s12">
+          <div class="row tab-content">
+            <form class="col s12 m10 l8 offset-m1 offset-l2"
+                  name="loginForm">
+              <%- include("input_form", {
+                formRows: [
+                    [
+                      {
+                        id: "loginUsername",
+                        type: "text",
+                        class: "required validate",
+                        name: "Username",
+                        label: "Korisnicko ime"
+                      }
+                    ],
+                    [
+                      {
+                        id: "loginPassword",
+                        type: "password",
+                        class: "required validate",
+                        name: "Password",
+                        label: "Lozinka"
+                      }
+                    ]
+                  ]
+              }); %>
+            </form>
+            <div class="row">
+              <div class="input-field col s12 center-align">
+                <button class="btn waves-effect waves-light" 
+                        onclick="login()">
+                  Prijavite se
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s10 offset-s1 center-align">
+                <div id="loginFormErrorMessage" 
+                     class="error-message valign-wrapper">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s10 offset-s1 center-align">
+                <div id="loginFormSuccessMessage" 
+                     class="success-message valign-wrapper">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="registration" class="col s12">
+          <div class="row tab-content">
+            <form class="col s12 m10 l8 offset-m1 offset-l2"
+                  name="registrationForm">
+            <%- include("input_form", {
+              formRows: [
+                  [
+                    {
+                      id: "registrationUsername",
+                      type: "text",
+                      class: "required validate",
+                      name: "Username",
+                      label: "Korisnicko ime*"
+                    },
+                    {
+                      id: "registrationFirstName",
+                      type: "text",
+                      class: "required validate",
+                      name: "FirstName",
+                      label: "Ime*"
+                    }
+                  ],
+                  [
+                    {
+                      id: "registrationPassword",
+                      type: "password",
+                      class: "required validate",
+                      name: "Password",
+                      label: "Lozinka*"
+                    },    
+                    {
+                      id: "registrationLastName",
+                      type: "text",
+                      class: "required validate",
+                      name: "LastName",
+                      label: "Prezime*"
+                    }
+                  ],
+                  [
+                    {
+                      id: "registrationConfirmationPassword",
+                      type: "password",
+                      class: "required validate",
+                      name: "ConfirmationPassword",
+                      label: "Potvrda lozinke*"
+                    },
+                    {
+                      id: "birthDate",
+                      type: "text",
+                      class: "required datepicker",
+                      name: "BirthDate",
+                      label: "Datum rodjenja*"
+                    }
+                  ],
+                  [
+                    {
+                      id: "registrationEmail",
+                      type: "email",
+                      class: "required validate",
+                      name: "Email",
+                      label: "Email*"
+                    }
+                  ],
+                  [
+                    {
+                      id: "",
+                      type: "radio",
+                      class: "required with-gap",
+                      name: "Gender",
+                      label: "Muski"
+                    },
+                    {
+                      id: "",
+                      type: "radio",
+                      class: "required with-gap",
+                      name: "Gender" ,
+                      label: "Zenski"
+                    }
+                  ],
+                  [
+                    {
+                      id: "registrationInstitution",
+                      type: "text",
+                      class: "required validate",
+                      name: "Institution",
+                      label: "Institucija*"
+                    },
+                    {
+                      id: "registrationLinkedInLink",
+                      type: "text",
+                      class: "validate",
+                      name: "LinkedIn",
+                      label: "LinkedIn"
+                    }
+                  ],
+                ]
+              }); %>
+            </form>
+            <div class="row">
+              <div class="input-field col s12 center-align">
+                <button class="btn waves-effect waves-light" 
+                        onclick="register()">
+                  Registruj se
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s10 offset-s1 center-align">
+                <div id="registrationFormErrorMessage" 
+                     class="error-message valign-wrapper">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s10 offset-s1 center-align">
+                <div id="registrationFormSuccessMessage" 
+                     class="success-message valign-wrapper">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="change-password" class="col s12">
+          <div class="row tab-content">
+            <form class="col s12 m10 l8 offset-m1 offset-l2"
+                  name="changePasswordForm">
+            <%- include("input_form", {
+              formRows: [
+                  [
+                    {
+                      id: "changePasswordUsername",
+                      type: "text",
+                      class: "validate",
+                      name: "Username",
+                      label: "Korisnicko ime"
+                    }
+                  ],
+                  [
+                    {
+                      id: "changePassword",
+                      type: "password",
+                      class: "validate",
+                      name: "Password",
+                      label: "Lozinka"
+                    }
+                  ],
+                  [
+                    {
+                      id: "newPassword",
+                      type: "password",
+                      class: "validate",
+                      name: "NewPassword",
+                      label: "Nova lozinka"
+                    }
+                  ]
+                ]
+              }); %>
+            </form>
+            <div class="row">
+              <div class="input-field col s12 center-align">
+                <button class="btn waves-effect waves-light" 
+                        onclick="changePassword()">
+                  Promeni
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s10 offset-s1 center-align">
+                <div id="changePasswordFormErrorMessage" 
+                      class="error-message valign-wrapper">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s10 offset-s1 center-align">
+                <div id="changePasswordFormSuccessMessage" 
+                      class="success-message valign-wrapper">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include footer.ejs %>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<form class="col s12 m8 l6 offset-m2 offset-l3" name="addLectureForm" encType="multipart/form-data">
+  <%- include("stepper", {
+    stepContents: [
+      {
+        title: 'Naslov predavanja (srpski)',
+        inputs: [
+          {
+            id: "lectureTitle",
+            type: "text",
+            class: "required validate",
+            name: "LectureTitle",
+            label: "Naslov*"
+          },
+          {
+            id: "lectureDescription",
+            type: "text",
+            class: "required validate",
+            name: "LectureDescription",
+            label: "Opis*"
+          }
+        ],
+        actions: ['NASTAVI']
+      },
+      {
+        title: 'Naslov predavanja (engleski)',
+        inputs: [
+          {
+            id: "lectureTitleEnglish",
+            type: "text",
+            class: "validate",
+            name: "LectureTitleEnglish",
+            label: "Naslov (engleski)"
+          },
+          {
+            id: "lectureDescriptionEnglish",
+            type: "text",
+            class: "validate",
+            name: "LectureDescriptionEnglish",
+            label: "Opis (engleski)"
+          }
+        ],
+        actions: ['NASTAVI', 'NAZAD']
+      },
+      {
+        title: 'Vreme i lokacija',
+        inputs: [
+          {
+            id: "lectureDate",
+            type: "text",
+            class: "required datepicker",
+            name: "LectureDate",
+            label: "Datum odrzavanja*"
+          },
+          {
+            id: "lectureTime",
+            type: "text",
+            class: "required timepicker",
+            name: "LectureTime",
+            label: "Vreme odrzavanja*"
+          },
+          {
+            id: "lectureHall",
+            type: "text",
+            class: "required validate",
+            name: "LectureHall",
+            label: "Sala*"
+          }
+        ],
+        actions: ['NASTAVI', 'NAZAD']
+      },
+      {
+        title: 'Predavac',
+        inputs: [
+          {
+            id: "lectureFirstName",
+            type: "text",
+            class: "required validate",
+            name: "LectureFirstName",
+            label: "Ime*"
+          },
+          {
+            id: "lectureLastName",
+            type: "text",
+            class: "required validate",
+            name: "lectureLastName",
+            label: "Prezime*"
+          },
+          {
+            id: "lectureBiography",
+            type: "textarea",
+            class: "materialize-textarea",
+            name: "LectureBiography",
+            label: "Biografija"
+          },
+        ],
+        actions: ['NASTAVI', 'NAZAD']
+      },
+      {
+        title: 'Fajl o predavanju (opciono)',
+        inputs: [
+          {
+            id: "lectureFile",
+            type: "file",
+            class: "file-path validate",
+            name: "LectureFile",
+            label: "Fajl o predavanju"
+          }
+        ],
+        actions: ['NAZAD']
+      }
+    ]
+  }); %>
+</form>
+<div class="row">
+  <div class="input-field col s12 center-align">
+    <button class="btn waves-effect waves-light" onclick="addLecture()">
+      Dodaj
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div class="col s10 offset-s1 center-align">
+    <div id="addLectureFormErrorMessage" class="error-message valign-wrapper">
+    </div>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+<form class="col s12 m8 l6 offset-m2 offset-l3" name="addAdvertisementForm">
+  <%- include("input_form", {
+      formRows: [
+          [
+            {
+              id: "addAdvertisementTitle",
+              type: "text",
+              class: "required validate",
+              name: "AddAdvertisementTitle",
+              label: "Naslov oglasa*"
+            }
+          ],
+          [
+            {
+              id: "addAdvertisementDesc",
+              type: "text",
+              class: "required validate",
+              name: "AddAdvertisementDesc",
+              label: "Opis oglasa*"
+            }
+          ],
+          [
+            {
+              id: "addAdvertisementExpiredDate",
+              type: "text",
+              class: "required datepicker",
+              name: "AddAdvertisementExpiredDate",
+              label: "Rok za prijavu*"
+            }
+          ],
+          [
+            {
+              id: "addAdvertisementFile",
+              type: "file",
+              class: "file-path validate",
+              name: "AddAdvertisementFile",
+              label: "Fajl oglasa*"
+            }
+          ]
+        ]
+    }); %>
+</form>
+<div class="row">
+  <div class="input-field col s12 center-align">
+    <button class="btn waves-effect waves-light" onclick="addAdvertisement()">
+      Dodaj
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div class="col s10 offset-s1 center-align">
+    <div id="addAdvertisementFormErrorMessage" class="error-message valign-wrapper">
+    </div>
+  </div>
+</div>

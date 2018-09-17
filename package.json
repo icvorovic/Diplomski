@@ -1,0 +1,24 @@
+{
+  "name": "diplomski",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "express-fileupload": "^0.4.0",
+    "express-session": "^1.15.6",
+    "lodash": "^4.17.11",
+    "materialize-css": "^1.0.0-rc.2",
+    "materialize-stepper": "^2.1.4",
+    "mysql2": "^1.6.1",
+    "sequelize": "^4.38.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Igor Cvorovic igluma95@gmail.com",
+  "license": "ISC"
+}

@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+
+<head>
+  <% include head.ejs %>
+</head>
+<script>
+  $(document).ready(function () {
+
+  });
+</script>
+
+<body>
+  <% include navbar.ejs %>
+    <div class="row wrapper">
+      <div class="col s12 m6 offset-m3">
+        <h4 class="center-align">AKTUELNI PAKETI</h4>
+        <div class="row">
+          <table class="highlight">
+            <thead>
+              <tr>
+                <th>Naziv</th>
+                <th>Vrednost</th>
+                <th>Opis</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(var i = 0; i < actualPackages.length; i++) { %>
+                <tr>
+                  <td><%= actualPackages[i].Name %></td>
+                  <td><%= actualPackages[i].Price %></td>
+                  <td>
+                    <ul>
+                      <% for(var j = 0; j < actualPackages[i].packageitems.length; j++) { %>
+                      <li>- <%= actualPackages[i].packageitems[j].Description %></li>
+                      <% } %>
+                    </ul>
+                  </td>
+                </tr>
+                <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <% include footer.ejs %>
+</body>
+
+</html>

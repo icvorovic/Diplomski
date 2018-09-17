@@ -1,0 +1,191 @@
+<div class="col s12 m8 l6 offset-m2 offset-l3">
+  <ul class="collapsible">
+    <li>
+      <div class="collapsible-header">
+        <i class="material-icons">money</i>Novcani ugovor</div>
+      <div class="collapsible-body">
+        <div class="row">
+          <form class="col s10 offset-s1" name="addMoneyContract" encType="multipart/form-data">
+            <%- include("input_form", {
+              formRows : [
+                [
+                  {
+                    id: "moneyContractCompanyName",
+                    type: "text",
+                    class: "required autocomplete",
+                    name: "MoneyContractCompanyName",
+                    label: "Naziv kompanije*"
+                  }
+                ],
+                [
+                  {
+                    id: "moneyContractPackageName",
+                    type: "text",
+                    class: "required validate",
+                    name: "MoneyContractPackageName",
+                    label: "Naziv paketa*"
+                  }
+                ],
+                [
+                  {
+                    id: "moneyContractValue",
+                    type: "text",
+                    class: "required number validate",
+                    name: "MoneyContractValue",
+                    label: "Vrednost paketa*"
+                  }
+                ],
+                [
+                  {
+                    id: "moneyContractDate",
+                    type: "text",
+                    class: "required datepicker",
+                    name: "MoneyContractDate",
+                    label: "Datum*"
+                  }
+                ],
+                [
+                  {
+                    id: "moneyContractInvoinceSent",
+                    type: "text",
+                    class: "required validate",
+                    name: "MoneyContractInvoinceSent",
+                    label: "Da li je faktura poslata?*"
+                  },
+                  {
+                    id: "moneyContractPaymentFinished",
+                    type: "text",
+                    class: "required validate",
+                    name: "MoneyContractPaymentFinished",
+                    label: "Da li je uplata izvrsena?*"
+                  }
+                ],
+                [
+                  {
+                    id: "moneyContractPaymentDate",
+                    type: "text",
+                    class: "required datepicker",
+                    name: "MoneyContractPaymentDate",
+                    label: "Datum placanja*"
+                  }
+                ],
+                [
+                  {
+                    id: "moneyContractAdditionalComment",
+                    type: "text",
+                    class: "validate",
+                    name: "MoneyContractAdditionalComment",
+                    label: "Dodatni komentar"
+                  }
+                ]
+              ]
+            }); %>
+          </form>
+          <div class="row">
+            <div class="input-field col s12 center-align">
+              <button class="btn waves-effect waves-light" onclick="addMoneyContract()">
+                Dodaj
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s10 offset-s1 center-align">
+              <div id="addMoneyContractFormErrorMessage" class="error-message valign-wrapper">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header">
+        <i class="material-icons">add</i>Donatorski ugovor</div>
+      <div class="collapsible-body">
+        <div class="row">
+          <form class="col s10 offset-s1" name="addDonateContract" encType="multipart/form-data">
+            <%- include("input_form", {
+                  formRows : [
+                    [
+                      {
+                        id: "donateContractCompanyName",
+                        type: "text",
+                        class: "required autocomplete",
+                        name: "DonateContractCompanyName",
+                        label: "Naziv kompanije*"
+                      }
+                    ],
+                    [
+                      {
+                        id: "donateContractPackageName",
+                        type: "text",
+                        class: "required validate",
+                        name: "DonateContractPackageName",
+                        label: "Naziv paketa*"
+                      }
+                    ],
+                    [
+                      {
+                        id: "donateContractValue",
+                        type: "text",
+                        class: "required number validate",
+                        name: "DonateContractValue",
+                        label: "Vrednost paketa*"
+                      }
+                    ],
+                    [
+                      {
+                        id: "donateContractDate",
+                        type: "text",
+                        class: "required datepicker",
+                        name: "DonateContractDate",
+                        label: "Datum*"
+                      }
+                    ],
+                    [
+                      {
+                        id: "donateContractDescription",
+                        type: "textarea",
+                        class: "required materialize-textarea",
+                        name: "DonateContractDescription",
+                        label: "Opis*"
+                      }
+                    ],
+                    [
+                      {
+                        id: "donateContractQuantity",
+                        type: "text",
+                        class: "number validate",
+                        name: "DonateContractQuantity",
+                        label: "Kolicina"
+                      }
+                    ],
+                    [
+                      {
+                        id: "donateContractDeliveryDate",
+                        type: "text",
+                        class: "required datepicker",
+                        name: "DonateContractDeliveryDate",
+                        label: "Datum isporuke*"
+                      }
+                    ]
+                  ]
+                }); %>
+          </form>
+          <div class="row">
+            <div class="input-field col s12 center-align">
+              <button class="btn waves-effect waves-light" onclick="addMoneyContract()">
+                Dodaj
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s10 offset-s1 center-align">
+              <div id="addMoneyContractFormErrorMessage" class="error-message valign-wrapper">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

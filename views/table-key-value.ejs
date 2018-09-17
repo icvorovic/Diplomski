@@ -1,0 +1,15 @@
+<table class="highlight">
+  <thead>
+    <% for (var i = 0; i < table.headings.length; i++) { %>
+      <th colspan="<%= table.headings[i].colspan %>"><%= table.headings[i].text %></th>
+    <% } %>
+  </thead>
+  <tbody>
+    <% for (var i = 0; i < table.rows.length; i++) { %>
+      <tr>
+        <td><%= table.rows[i].key %></td>
+        <td><%= table.rows[i].value %> </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>

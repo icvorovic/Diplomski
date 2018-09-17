@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+
+<head>
+  <% include head.ejs %>
+</head>
+<script>
+  $(document).ready(function () {
+
+  });
+</script>
+
+<style>
+  .left-td {
+    font-weight: bold;
+  }
+
+  .border {
+    border: 2px solid rgba(109, 92, 92, 0.753);
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+  }
+
+  .border-right {
+    border-right: 1px solid rgba(109, 92, 92, 0.514);
+  }
+
+  td {
+    padding: 10px 5px;
+  }
+</style>
+
+<body>
+  <% include navbar.ejs %>
+    <div class="row wrapper">
+      <div class="col s12 m8 offset-m2">
+        <h4 class="center-align">PREDSTOJECA PREDAVANJA</h4>
+        <div class="row">
+          <div class="col s12">
+            <div class="row">
+              <div class="col s8">
+                <h5>Detalji o predavanju</h5>
+              </div>
+              <div class="col s4">
+                <h5>O predavacu</h5>
+              </div>
+            </div>
+            <% for(var i=0; i < lectures.length; i++) { %>
+              <div class="row border">
+                <div class="col s8 border-right">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td class="left-td">Naslov</td>
+                        <td>
+                          <%= lectures[i].TitleSerbian %>
+                          <% if (lectures[i].TitleEnglish) { %>
+                            (<%= lectures[i].TitleEnglish %>)
+                          <% } %> 
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left-td">Opis</td>
+                        <td>
+                          <%= lectures[i].DescriptionSerbian %>
+                          <% if (lectures[i].DescriptionEnglish) { %>
+                            (<%= lectures[i].DescriptionEnglish %>)
+                          <% } %> 
+                          </td>
+                      </tr>
+                      <tr>
+                        <td class="left-td">Datum</td>
+                        <td>
+                          <%= lectures[i].DateTime.toLocaleString() %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left-td">Sala</td>
+                        <td>
+                          <%= lectures[i].Hall %>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="col s4">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td class="left-td">Ime</td>
+                        <td>
+                          <%= lectures[i].FirstName %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left-td">Prezime</td>
+                        <td>
+                          <%= lectures[i].SecondName %>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p class="left-td">Biografija</p>
+                  <p>
+                    <%= lectures[i].Biography %>
+                  </p>
+                </div>
+              </div>
+              <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include footer.ejs %>
+</body>
+
+</html>

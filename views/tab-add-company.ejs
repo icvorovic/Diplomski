@@ -1,0 +1,195 @@
+<form class="col s12 m8 l6 offset-m2 offset-l3" name="createCompanyForm" encType="multipart/form-data">
+  <%- include("stepper", {
+    stepContents: [
+      {
+        title: 'Podaci o kompaniji',
+        inputs: [
+          {
+            id: "companyName",
+            type: "text",
+            class: "required validate",
+            name: "CompanyName",
+            label: "Naziv*"
+          },
+          {
+            id: "companyAddress",
+            type: "text",
+            class: "required validate",
+            name: "CompanyAddress",
+            label: "Adresa*"
+          },
+          {
+            id: "companyCity",
+            type: "text",
+            class: "required validate",
+            name: "CompanyCity",
+            label: "Grad*"
+          },
+          {
+            id: "companyPostCode",
+            type: "text",
+            class: "required validate",
+            name: "CompanyPostCode",
+            label: "Postanski broj*"
+          },
+          {
+            id: "companyCountry",
+            type: "text",
+            class: "required validate",
+            name: "CompanyCountry",
+            label: "Drzava*"
+          },
+          {
+            id: "companyWebsite",
+            type: "text",
+            class: "required validate",
+            name: "CompanyWebsite",
+            label: "Website*"
+          },
+          {
+            id: "companyDescription",
+            type: "text",
+            class: "required validate",
+            name: "CompanyDescription",
+            label: "O kompaniji*"
+          }
+        ],
+        actions: ['NASTAVI']
+      },
+      {
+        title: 'Finansijski podaci o kompaniji',
+        inputs: [
+          {
+            id: "companyPIB",
+            type: "text",
+            class: "required validate",
+            name: "CompanyPIB",
+            label: "PIB*"
+          },
+          {
+            id: "companyBankAccount",
+            type: "text",
+            class: "required validate",
+            name: "CompanyBankAccount",
+            label: "Ziro racun*"
+          },
+          {
+            id: "companyCurrency",
+            type: "text",
+            class: "required validate",
+            name: "CompanyCurrency",
+            label: "Valuta*"
+          },
+        ],
+        actions: ['NASTAVI', 'NAZAD']
+      },
+      {
+        title: 'Kontakt telefoni',
+        inputs: [
+          {
+            id: "companyPhone1",
+            type: "text",
+            class: "required validate",
+            name: "CompanyPhone",
+            label: "Telefon 1*"
+          },
+          {
+            id: "companyPhone2",
+            type: "text",
+            class: "validate",
+            name: "CompanyPhone",
+            label: "Telefon 2"
+          }
+        ],
+        actions: ['NASTAVI', 'NAZAD']
+      },
+      {
+        title: 'Kontakt email adrese',
+        inputs: [
+          {
+            id: "companyEmail1",
+            type: "text",
+            class: "required validate",
+            name: "CompanyEmail",
+            label: "Email 1*"
+          },
+          {
+            id: "companyPhone2",
+            type: "text",
+            class: "validate",
+            name: "CompanyEmail",
+            label: "Email 2"
+          },
+          {
+            id: "companyPhone3",
+            type: "text",
+            class: "validate",
+            name: "CompanyEmail",
+            label: "Email 3"
+          }
+        ],
+        actions: ['NASTAVI', 'NAZAD']
+      },
+      {
+        title: 'Podaci o kontakt osobi',
+        inputs: [
+          {
+            id: "companyContactPersonFirstName",
+            type: "text",
+            class: "required validate",
+            name: "CompanyContactPersonFirstName",
+            label: "Ime*"
+          },
+          {
+            id: "companyContactPersonLastName",
+            type: "text",
+            class: "required validate",
+            name: "CompanyContactPersonLastName",
+            label: "Prezime*"
+          },
+          {
+            id: "companyContactPersonPhone",
+            type: "text",
+            class: "required validate",
+            name: "CompanyContactPersonPhone",
+            label: "Kontakt telefon*"
+          },
+          {
+            id: "companyContactPersonEmail",
+            type: "text",
+            class: "required validate",
+            name: "CompanyContactPersonEmail",
+            label: "Email*"
+          },
+        ],
+        actions: ['NASTAVI', 'NAZAD']
+      },
+      {
+        title: 'Logo kompanije',
+        inputs: [
+          {
+            id: "companyLogo",
+            type: "file",
+            class: "file-path required validate",
+            name: "CompanyLogo",
+            label: "Logo kompanije*"
+          }
+        ],
+        actions: ['NAZAD']
+      }
+    ]
+  }); %>
+</form>
+<div class="row">
+  <div class="input-field col s12 center-align">
+    <button class="btn waves-effect waves-light" onclick="addCompany()">
+      Dodaj
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div class="col s10 offset-s1 center-align">
+    <div id="createCompanyFormErrorMessage" class="error-message valign-wrapper">
+    </div>
+  </div>
+</div>

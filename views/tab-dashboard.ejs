@@ -1,0 +1,49 @@
+<div class="row">
+  <div id="timeline" class="col s12">
+    <% include timeline_diagram.ejs %>
+  </div>
+  <div class="row">
+    <div class="col s6 l4 offset-l2">
+      <h6 class="center-align">NAJSKORIJE POTPISANI UGOVORI</h6>
+      <table>
+        <thead>
+          <th>Naziv kompanije</th>
+          <th>Datum potpisa</th>
+        </thead>
+        <tbody>
+          <% for(var i=0; i < mostRecentCreatedContracts.length; i++) { %>
+            <tr>
+              <td>
+                <%= mostRecentCreatedContracts[i].CompanyName %>
+              </td>
+              <td>
+                <%= mostRecentCreatedContracts[i].CreatedDate %>
+              </td>
+            </tr>
+            <% } %>
+        </tbody>
+      </table>
+    </div>
+    <div class="col s6 l4">
+      <h6 class="center-align">UGOVORI KOJI USKORO ISTICU</h6>
+      <table>
+        <thead>
+          <th>Naziv kompanije</th>
+          <th>Datum isteka</th>
+        </thead>
+        <tbody>
+          <% for(var i=0; i < mostRecentExpiredContracts.length; i++) { %>
+            <tr>
+              <td>
+                <%= mostRecentExpiredContracts[i].CompanyName %>
+              </td>
+              <td>
+                <%= mostRecentExpiredContracts[i].ExpiredDate %>
+              </td>
+            </tr>
+            <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

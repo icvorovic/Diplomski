@@ -1,0 +1,45 @@
+<form class="col s12 m8 l6 offset-m2 offset-l3" name="searchCompanyForm">
+  <%- include("input_form", {
+      formRows: [
+          [
+            {
+              id: "searchPackageName",
+              type: "text",
+              class: "validate",
+              name: "SearchPackageName",
+              label: "Ime paketa"
+            }
+          ],
+          [
+            {
+              id: "searchCompanyName",
+              type: "text",
+              class: "validate",
+              name: "SearchCompanyName",
+              label: "Ime kompanije"
+            }
+          ],
+          [
+            {
+              id: "searchOnlyWithValidContract",
+              type: "text",
+              class: "validate",
+              name: "SearchOnlyWithValidContract",
+              label: "Samo sa validnim ugovorom"
+            }
+          ]
+        ]
+    }); %>
+</form>
+<div class="row">
+  <div class="input-field col s12 center-align">
+    <button class="btn waves-effect waves-light" onclick="searchCompany()">
+      Pretrazi
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div id="results" class="col s12 m8 l6 offset-m2 offset-l3">
+
+  </div>
+</div>

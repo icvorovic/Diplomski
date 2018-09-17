@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+
+<head>
+  <% include head.ejs %>
+</head>
+<script>
+  $(document).ready(function () {
+
+  });
+</script>
+
+<style>
+  .left-td {
+    font-weight: bold;
+  }
+
+  .border {
+    border: 2px solid rgba(109, 92, 92, 0.753);
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+  }
+
+  .border-right {
+    border-right: 1px solid rgba(109, 92, 92, 0.514);
+  }
+
+  td {
+    padding: 10px 5px;
+  }
+</style>
+
+<body>
+  <% include navbar.ejs %>
+    <div class="row wrapper">
+      <div class="col s12 m8 offset-m2">
+        <h4 class="center-align">OGLASI ZA PRAKSU I POSAO</h4>
+        <div class="row">
+          <div class="col s12">
+            <% for(var i=0; i < advertisement.length; i++) { %>
+              <div class="row border">
+                <div class="col s8 border-right">
+                  <h5>
+                    <%= advertisement[i].Title %>
+                  </h5>
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td class="left-td">Opis</td>
+                        <td>
+                          <%= advertisement[i].Description %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left-td">Naziv kompanije</td>
+                        <td>
+                            <%= advertisement[i].CompanyName %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left-td">Tip oglasa</td>
+                        <td>
+                            <%= advertisement[i].Type %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left-td">Vazi do</td>
+                        <td>
+                          <%= advertisement[i].ExpiredDate %>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% include footer.ejs %>
+</body>
+
+</html>

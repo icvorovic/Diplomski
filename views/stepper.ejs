@@ -1,0 +1,56 @@
+<ul class="stepper linear">
+  <% for(var i = 0; i < stepContents.length; i++) { %>
+    <% if (i === 0) { %> 
+      <li class="step active">
+    <% } else { %>
+      <li class="step">
+    <% } %>
+      <div class="step-title waves-effect"><%= stepContents[i].title %></div>
+      <div class="step-content">
+        <% for(var j = 0; j < stepContents[i].inputs.length; j++) { %>
+        <div class="row">
+          <% if (stepContents[i].inputs[j].type === 'text') { %>
+          <div class="input-field col s12">
+            <input id="<%= stepContents[i].inputs[j].id %>" 
+                   type="<%= stepContents[i].inputs[j].type %>"
+                   class="<%= stepContents[i].inputs[j].class %>" 
+                   name="<%= stepContents[i].inputs[j].name %>">
+            <label for="<%= stepContents[i].inputs[j].id %>"><%= stepContents[i].inputs[j].label %></label>
+          </div>
+          <% } else if (stepContents[i].inputs[j].type === 'textarea') { %>
+          <div class="input-field col s12">
+            <textarea id="<%= stepContents[i].inputs[j].id %>" 
+                    class="<%= stepContents[i].inputs[j].class %>" 
+                    name="<%= stepContents[i].inputs[j].name %>"></textarea>
+            <label for="<%= stepContents[i].inputs[j].id %>"><%= stepContents[i].inputs[j].label %></label>
+          </div>
+          <% } else if (stepContents[i].inputs[j].type === 'file') { %>
+              <div class="file-field input-field">
+                <div class="btn">
+                  <span><%= stepContents[i].inputs[j].label %></span>
+                  <input type="<%= stepContents[i].inputs[j].type %>"
+                         name="<%= stepContents[i].inputs[j].name %>">
+                </div>
+                <div class="file-path-wrapper">
+                  <input id="<%= stepContents[i].inputs[j].id %>" 
+                         class="<%= stepContents[i].inputs[j].class %>" 
+                         type="text">
+                </div>
+              </div>
+          <% } %>
+        </div>
+        <% } %>
+        <div class="step-actions">
+          <% for(var j = 0; j < stepContents[i].actions.length; j++) { %>
+            <% if (stepContents[i].actions[j] === 'NASTAVI') { %>
+              <button type="button" class="waves-effect waves-dark btn next-step">NASTAVI</button>
+            <% } %>
+            <% if (stepContents[i].actions[j] === 'NAZAD') { %>
+              <button type="button" style="color: white" class="waves-effect waves-dark btn-flat previous-step">NAZAD</button>     
+            <% } %>
+          <% } %>
+        </div>
+      </div>
+  </li>
+  <% } %>
+</ul>

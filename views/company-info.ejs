@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+
+<head>
+  <% include head.ejs %>
+</head>
+<script>
+  $(document).ready(function () {
+    $('.tabs').tabs();
+    $('.timepicker').timepicker({
+      twelveHour: false
+    });
+    $('input.autocomplete').autocomplete({
+      data: {
+        "Apple": null,
+        "Microsoft": null,
+        "Google": 'https://placehold.it/250x250'
+      },
+    });
+    $('.collapsible').collapsible();
+    initDatePicker();
+    $('.stepper').activateStepper({
+      linearStepsNavigation: true, //allow navigation by clicking on the next and previous steps on linear steppers
+      autoFocusInput: true, //since 2.1.1, stepper can auto focus on first input of each step
+      autoFormCreation: false, //control the auto generation of a form around the stepper (in case you want to disable it)
+      showFeedbackLoader: true //set if a loading screen will appear while feedbacks functions are running,
+    });
+  });
+</script>
+
+<body>
+  <% include navbar.ejs %>
+    <div class="row wrapper">
+      <div class="col s12 m10 offset-m1">
+        <ul id="tabs-swipe-demo" class="tabs">
+          <li class="tab col s3">
+            <a href="#tab-company-info">Pretraga</a>
+          </li>
+          <li class="tab col s3">
+            <a href="#test-add-advertisement">Dodaj oglas</a>
+          </li>
+          <li class="tab col s3">
+            <a href="#test-add-lecture">Dodaj predavanje</a>
+          </li>
+        </ul>
+        <div id="tab-company-info" class="col s12 tab-content">
+          <h4 class="center-align">Podaci o kompaniji</h4>
+          <div class="row">
+            <div class="col s12 m6">
+
+              <%- include("table-key-value", {
+                table : {
+                  headings: [
+                    {
+                      colspan: 2,
+                      text: "Osnovni podaci"
+                    }
+                  ],
+                  rows: [
+                    {
+                      key: "Naziv kompanije",
+                      value: company.Name
+                    },
+                    {
+                      key: "Adresa",
+                      value: company.Address
+                    },
+                    {
+                      key: "Postanski broj",
+                      value: company.PostCode
+                    },
+                    {
+                      key: "Grad",
+                      value: company.City
+                    },
+                    {
+                      key: "Drzava",
+                      value: company.Country
+                    }
+                  ]
+                }
+              }); %>
+                <%- include("table-key-value", {
+                table : {
+                  headings: [
+                    {
+                      colspan: 2,
+                      text: "Administrativni podaci"
+                    }
+                  ],
+                  rows: [
+                    {
+                      key: "PIB",
+                      value: company.PIB
+                    },
+                    {
+                      key: "Ziro racun",
+                      value: company.bankaccounts[0].IDBankAccount
+                    },
+                    {
+                      key: "Valuta",
+                      value: company.bankaccounts[0].Currency
+                    }
+                  ]
+                }
+              }); %>
+                  <%- include("table-key-value", {
+                table : {
+                  headings: [
+                    {
+                      colspan: 2,
+                      text: "Kontakt osoba"
+                    }
+                  ],
+                  rows: [
+                    {
+                      key: "Ime",
+                      value: company.contacts[0].FirstName
+                    },
+                    {
+                      key: "Prezime",
+                      value: company.contacts[0].LastName
+                    },
+                    {
+                      key: "Telefon",
+                      value: company.contacts[0].Telephone
+                    },
+                    {
+                      key: "Email",
+                      value: company.contacts[0].Email
+                    },
+                  ]
+                }
+              }); %>
+                    <table class="highlight">
+                      <thead>
+                        <th colspan="2">Kontakt email adrese</th>
+                      </thead>
+                      <tbody>
+                        <% for (var i = 0; i < company.emails.length; i++) { %>
+                          <tr>
+                            <td>Email
+                              <%= i + 1 %>
+                            </td>
+                            <td>
+                              <%= company.emails[i].Email %>
+                            </td>
+                          </tr>
+                          <% } %>
+                      </tbody>
+                    </table>
+            </div>
+            <div class="col s12 m6">
+              <h5 class="center-align">Ugovori</h5>
+              <table class="highlight">
+                <thead>
+                  <th>Vrsta paketa</th>
+                  <th>Datum potpisivanja</th>
+                  <th>Datum isticanja</th>
+                </thead>
+                <tbody>
+                  <% for (var i = 0; i < company.contracts.length; i++) { %>
+                    <tr>
+                      <td>
+                        <%= company.contracts[i].package.Name %>
+                      </td>
+                      <td>
+                        <%= company.contracts[i].CreationDate %>
+                      </td>
+                      <td>
+                        <%= company.contracts[i].ExpiredDate %>
+                      </td>
+                    </tr>
+                    <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="test-add-advertisement" class="col s12 tab-content">
+          <% include tab-add-advertisement.ejs %>
+        </div>
+        <div id="test-add-lecture" class="col s12 tab-content">
+          <%- include("tab-add-lecture") %>
+        </div>
+      </div>
+    </div>
+    <% include footer.ejs %>
+</body>
+
+</html>

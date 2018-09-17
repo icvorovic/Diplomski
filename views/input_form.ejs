@@ -1,0 +1,42 @@
+<% for(var i = 0; i < formRows.length; i++) { %>
+  <div class="row mb-0">
+    <% for(var j = 0; j < formRows[i].length; j++) { %>
+      <div class="input-field col s<%= (12 / formRows[i].length) %>">
+        <% if (formRows[i][j].type === 'radio') { %>
+          <p>
+            <label>
+              <input name="<%= formRows[i][j].name %>"
+                    type="<%= formRows[i][j].type %>"
+                    value="<%= formRows[i][j].label %>"/>
+              <span><%= formRows[i][j].label %></span>
+            </label>
+          </p>
+          <% } else if (formRows[i][j].type === 'textarea') { %>
+            <textarea id="<%= formRows[i][j].id %>" 
+                    class="<%= formRows[i][j].class %>" 
+                    name="<%= formRows[i][j].name %>"></textarea>
+            <label for="<%= formRows[i][j].id %>"><%= formRows[i][j].label %></label>
+          <% } else if (formRows[i][j].type === 'file') { %>
+            <div class="file-field input-field">
+              <div class="btn">
+                <span><%= formRows[i][j].label %></span>
+                <input type="<%= formRows[i][j].type %>"
+                       name="<%= formRows[i][j].name %>">
+              </div>
+              <div class="file-path-wrapper">
+                <input id="<%= formRows[i][j].id %>" 
+                       class="<%=  formRows[i][j].class %>" 
+                       type="text">
+              </div>
+            </div>
+        <% } else { %>
+          <input id="<%= formRows[i][j].id %>" 
+                  type="<%= formRows[i][j].type %>"
+                  class="<%= formRows[i][j].class %>" 
+                  name="<%= formRows[i][j].name %>">
+          <label for="<%= formRows[i][j].id %>"><%= formRows[i][j].label %></label>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+<% } %>
