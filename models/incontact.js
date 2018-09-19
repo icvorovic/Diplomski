@@ -3,7 +3,7 @@
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('incontact', {
     Username: {
-      type: DataTypes.STRING(30),
+      type: DataTypes.STRING(50),
       allowNull: false,
       primaryKey: true,
       references: {
@@ -22,6 +22,6 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'incontact',
-    timestamps: false,
+    timestamps: false
   });
 };

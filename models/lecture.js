@@ -2,14 +2,8 @@
 
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('lecture', {
-    IDLecture: {
-      type: DataTypes.INTEGER(11),
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true
-    },
     Username: {
-      type: DataTypes.STRING(30),
+      type: DataTypes.STRING(50),
       allowNull: false,
       references: {
         model: 'incontact',
@@ -24,6 +18,12 @@ module.exports = function(sequelize, DataTypes) {
         key: 'PIB'
       }
     },
+    IDLecture: {
+      type: DataTypes.INTEGER(11),
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
     TitleSerbian: {
       type: DataTypes.STRING(50),
       allowNull: false
@@ -33,11 +33,11 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     DescriptionSerbian: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(300),
       allowNull: false
     },
     DescriptionEnglish: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(300),
       allowNull: true
     },
     DateTime: {
@@ -49,23 +49,23 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     FirstName: {
-      type: DataTypes.STRING(30),
+      type: DataTypes.STRING(50),
       allowNull: false
     },
-    SecondName: {
-      type: DataTypes.STRING(30),
+    LastName: {
+      type: DataTypes.STRING(50),
       allowNull: false
     },
     Biography: {
-      type: DataTypes.STRING(200),
+      type: DataTypes.STRING(300),
       allowNull: true
     },
     FilePath: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(200),
       allowNull: true
     }
   }, {
     tableName: 'lecture',
-    timestamps: false,
+    timestamps: false
   });
 };

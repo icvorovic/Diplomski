@@ -25,7 +25,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     AdditionalComment: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(300),
       allowNull: true
     },
     IDContractStatus: {
@@ -46,6 +46,6 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'contract',
-    timestamps: false,
+    timestamps: false
   });
 };

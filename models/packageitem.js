@@ -22,6 +22,6 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'packageitem',
-    timestamps: false,
+    timestamps: false
   });
 };

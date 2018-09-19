@@ -1,4 +1,56 @@
+<ul class="collapsible">
+  <li>
+    <div class="collapsible-header">
+      Dodaj JSON fajl
+    </div>
+    <div class="collapsible-body">
+      <form class="col s12 m8 l6 offset-m2 offset-l3" name="addAdvertisementJsonForm" encType="multipart/form-data">
+        <div class="file-field input-field">
+          <div class="btn">
+            <span>JSON Fajl*</span>
+            <input type="file" name="AddAdvertisementJsonFile">
+          </div>
+          <div class="file-path-wrapper">
+            <input class="validate" type="text">
+          </div>
+        </div>
+      </form>
+      <div class="row">
+        <div class="input-field col s12 center-align">
+          <button class="btn waves-effect waves-light" onclick="addAdvertisementJson()">
+            Dodaj
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s10 offset-s1 center-align">
+          <div id="addAdvertisementJsonFormErrorMessage" class="error-message valign-wrapper">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s10 offset-s1 center-align">
+          <div id="addAdvertisementJsonFormSuccessMessage" class="success-message valign-wrapper">
+          </div>
+        </div>
+      </div>
+  </li>
+</ul>
 <form class="col s12 m8 l6 offset-m2 offset-l3" name="addAdvertisementForm">
+  <div class="row">
+    <div class="input-field col s6 center-align">
+      <label>
+        <input type="checkbox" checked="checked" name="AddAdvertisementType" value="1" />
+        <span>Posao</span>
+      </label>
+    </div>
+    <div class="input-field col s6 center-align">
+      <label>
+        <input type="checkbox" name="AddAdvertisementType" value="2" />
+        <span>Praksa</span>
+      </label>
+    </div>
+  </div>
   <%- include("input_form", {
       formRows: [
           [
@@ -34,7 +86,7 @@
               type: "file",
               class: "file-path validate",
               name: "AddAdvertisementFile",
-              label: "Fajl oglasa*"
+              label: "Fajl oglasa"
             }
           ]
         ]
@@ -50,6 +102,12 @@
 <div class="row">
   <div class="col s10 offset-s1 center-align">
     <div id="addAdvertisementFormErrorMessage" class="error-message valign-wrapper">
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col s10 offset-s1 center-align">
+    <div id="addAdvertisementFormSuccessMessage" class="success-message valign-wrapper">
     </div>
   </div>
 </div>

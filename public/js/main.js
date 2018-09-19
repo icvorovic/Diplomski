@@ -168,6 +168,14 @@ function addLecture() {
   sendFormRequest("addLectureForm", "POST", "/add-company-lecture", "Uspesno ste dodali predavanje!", "Neispravni podaci!");
 }
 
+function addLectureCsv() {
+  sendFormRequest("addLectureCsvForm", "POST", "/add-company-lecture-csv", "Uspesno ste dodali predavanja!", "Izaberite odgovarajuci fajl!");
+}
+
+function addAdvertisementJson() {
+  sendFormRequest("addAdvertisementJsonForm", "POST", "/add-company-advertisement-json", "Uspesno ste dodali oglase!", "Izaberite odgovarajuci fajl!");
+}
+
 function searchCompany() {
   var form = $('form[name="searchCompanyForm"]');
   var url = '/search-company';

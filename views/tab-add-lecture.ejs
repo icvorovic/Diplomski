@@ -1,3 +1,41 @@
+<ul class="collapsible">
+  <li>
+    <div class="collapsible-header">
+      Dodaj CSV fajl
+    </div>
+    <div class="collapsible-body">
+      <form class="col s12 m8 l6 offset-m2 offset-l3" name="addLectureCsvForm" encType="multipart/form-data">
+        <div class="file-field input-field">
+          <div class="btn">
+            <span>CSV Fajl*</span>
+            <input type="file" name="AddLectureCsvFile">
+          </div>
+          <div class="file-path-wrapper">
+            <input class="validate" type="text">
+          </div>
+        </div>
+      </form>
+      <div class="row">
+        <div class="input-field col s12 center-align">
+          <button class="btn waves-effect waves-light" onclick="addLectureCsv()">
+            Dodaj
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s10 offset-s1 center-align">
+          <div id="addLectureCsvFormErrorMessage" class="error-message valign-wrapper">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s10 offset-s1 center-align">
+          <div id="addLectureCsvFormSuccessMessage" class="success-message valign-wrapper">
+          </div>
+        </div>
+      </div>
+  </li>
+</ul>
 <form class="col s12 m8 l6 offset-m2 offset-l3" name="addLectureForm" encType="multipart/form-data">
   <%- include("stepper", {
     stepContents: [
@@ -82,7 +120,7 @@
             id: "lectureLastName",
             type: "text",
             class: "required validate",
-            name: "lectureLastName",
+            name: "LectureLastName",
             label: "Prezime*"
           },
           {
@@ -121,6 +159,12 @@
 <div class="row">
   <div class="col s10 offset-s1 center-align">
     <div id="addLectureFormErrorMessage" class="error-message valign-wrapper">
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col s10 offset-s1 center-align">
+    <div id="addLectureFormSuccessMessage" class="success-message valign-wrapper">
     </div>
   </div>
 </div>

@@ -84,45 +84,25 @@
         actions: ['NASTAVI', 'NAZAD']
       },
       {
-        title: 'Kontakt telefoni',
-        inputs: [
-          {
-            id: "companyPhone1",
-            type: "text",
-            class: "required validate",
-            name: "CompanyPhone",
-            label: "Telefon 1*"
-          },
-          {
-            id: "companyPhone2",
-            type: "text",
-            class: "validate",
-            name: "CompanyPhone",
-            label: "Telefon 2"
-          }
-        ],
-        actions: ['NASTAVI', 'NAZAD']
-      },
-      {
         title: 'Kontakt email adrese',
         inputs: [
           {
             id: "companyEmail1",
-            type: "text",
+            type: "email",
             class: "required validate",
             name: "CompanyEmail",
             label: "Email 1*"
           },
           {
-            id: "companyPhone2",
-            type: "text",
+            id: "companyEmail2",
+            type: "email",
             class: "validate",
             name: "CompanyEmail",
             label: "Email 2"
           },
           {
-            id: "companyPhone3",
-            type: "text",
+            id: "companyEmail3",
+            type: "email",
             class: "validate",
             name: "CompanyEmail",
             label: "Email 3"
@@ -148,15 +128,15 @@
             label: "Prezime*"
           },
           {
-            id: "companyContactPersonPhone",
+            id: "companyContactPersonTelephone",
             type: "text",
             class: "required validate",
-            name: "CompanyContactPersonPhone",
+            name: "CompanyContactPersonTelephone",
             label: "Kontakt telefon*"
           },
           {
             id: "companyContactPersonEmail",
-            type: "text",
+            type: "email",
             class: "required validate",
             name: "CompanyContactPersonEmail",
             label: "Email*"
@@ -190,6 +170,12 @@
 <div class="row">
   <div class="col s10 offset-s1 center-align">
     <div id="createCompanyFormErrorMessage" class="error-message valign-wrapper">
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col s10 offset-s1 center-align">
+    <div id="createCompanyFormSuccessMessage" class="success-message valign-wrapper">
     </div>
   </div>
 </div>

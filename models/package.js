@@ -9,7 +9,7 @@ module.exports = function(sequelize, DataTypes) {
       autoIncrement: true
     },
     Name: {
-      type: DataTypes.STRING(30),
+      type: DataTypes.STRING(50),
       allowNull: false
     },
     Status: {
@@ -25,7 +25,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     Description: {
-      type: DataTypes.STRING(150),
+      type: DataTypes.STRING(250),
       allowNull: false
     },
     Duration: {
@@ -38,6 +38,6 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'package',
-    timestamps: false,
+    timestamps: false
   });
 };

@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     Address: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(70),
       allowNull: false
     },
     City: {
@@ -29,19 +29,19 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     Logo: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(200),
       allowNull: true
     },
     Description: {
-      type: DataTypes.STRING(150),
+      type: DataTypes.STRING(300),
       allowNull: true
     },
     Website: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(100),
       allowNull: false
     }
   }, {
     tableName: 'company',
-    timestamps: false,
+    timestamps: false
   });
 };

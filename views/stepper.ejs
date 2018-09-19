@@ -9,7 +9,7 @@
       <div class="step-content">
         <% for(var j = 0; j < stepContents[i].inputs.length; j++) { %>
         <div class="row">
-          <% if (stepContents[i].inputs[j].type === 'text') { %>
+          <% if (stepContents[i].inputs[j].type === 'text' || stepContents[i].inputs[j].type === 'email') { %>
           <div class="input-field col s12">
             <input id="<%= stepContents[i].inputs[j].id %>" 
                    type="<%= stepContents[i].inputs[j].type %>"

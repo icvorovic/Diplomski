@@ -56,6 +56,14 @@ db.companyModel.hasMany(db.contactModel, {
   foreignKey: 'PIB',
   targetKey: 'PIB'
 });
+db.companyModel.hasMany(db.inContactModel, {
+  foreignKey: 'PIB',
+  targetKey: 'PIB'
+});
+db.userModel.hasMany(db.inContactModel, {
+  foreignKey: 'Username',
+  targetKey: 'Username'
+});
 db.companyModel.hasMany(db.emailModel, {
   foreignKey: 'PIB',
   targetKey: 'PIB'
@@ -87,6 +95,14 @@ db.emailModel.belongsTo(db.companyModel, {
 db.contactModel.belongsTo(db.companyModel, {
   foreignKey: 'PIB',
   targetKey: 'PIB'
+});
+db.inContactModel.belongsTo(db.companyModel, {
+  foreignKey: 'PIB',
+  targetKey: 'PIB'
+});
+db.inContactModel.belongsTo(db.userModel, {
+  foreignKey: 'Username',
+  targetKey: 'Username'
 });
 db.packageItemModel.belongsTo(db.packageModel, {
   foreignKey: 'IDPackage',

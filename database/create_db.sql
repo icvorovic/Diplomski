@@ -1,6 +1,3 @@
--- ****************** SqlDBM: MySQL ******************;
--- ***************************************************;
-
 -- ************************************** `ContractStatus`
 
 CREATE TABLE `ContractStatus`
@@ -16,11 +13,11 @@ PRIMARY KEY (`IDContractStatus`)
 CREATE TABLE `Package`
 (
  `IDPackage`       INT NOT NULL AUTO_INCREMENT ,
- `Name`            VARCHAR(30) NOT NULL ,
+ `Name`            VARCHAR(50) NOT NULL ,
  `Status`          VARCHAR(30) NOT NULL ,
  `Type`            VARCHAR(30) NOT NULL ,
  `Price`           INT NOT NULL ,
- `Description`     VARCHAR(150) NOT NULL ,
+ `Description`     VARCHAR(250) NOT NULL ,
  `Duration`        INT NOT NULL ,
  `MaxCompanyNumbe` INT NOT NULL ,
 
@@ -33,13 +30,13 @@ CREATE TABLE `Company`
 (
  `PIB`         INT NOT NULL AUTO_INCREMENT ,
  `Name`        VARCHAR(50) NOT NULL ,
- `Address`     VARCHAR(50) NOT NULL ,
+ `Address`     VARCHAR(70) NOT NULL ,
  `City`        VARCHAR(50) NOT NULL ,
  `PostCode`    INT NOT NULL ,
  `Country`     VARCHAR(50) NOT NULL ,
- `Logo`        VARCHAR(50) ,
- `Description` VARCHAR(150) ,
- `Website`     VARCHAR(50) NOT NULL ,
+ `Logo`        VARCHAR(200) ,
+ `Description` VARCHAR(300) ,
+ `Website`     VARCHAR(100) NOT NULL ,
 
 PRIMARY KEY (`PIB`)
 );
@@ -48,17 +45,17 @@ PRIMARY KEY (`PIB`)
 
 CREATE TABLE `User`
 (
- `Username`          VARCHAR(30) NOT NULL ,
- `FirstName`         VARCHAR(30) NOT NULL ,
- `LastName`          VARCHAR(30) NOT NULL ,
- `Email`             VARCHAR(50) NOT NULL ,
- `Password`          VARCHAR(30) NOT NULL ,
+ `Username`          VARCHAR(50) NOT NULL ,
+ `FirstName`         VARCHAR(50) NOT NULL ,
+ `LastName`          VARCHAR(50) NOT NULL ,
+ `Email`             VARCHAR(70) NOT NULL ,
+ `Password`          VARCHAR(50) NOT NULL ,
  `Gender`            VARCHAR(15) NOT NULL ,
  `BirthDate`         DATE NOT NULL ,
- `LinkedIn`          VARCHAR(100) NOT NULL ,
+ `LinkedIn`          VARCHAR(100) ,
  `RegistrationState` VARCHAR(30) NOT NULL ,
  `Type`              VARCHAR(30) NOT NULL ,
- `Status`            VARCHAR(30) NOT NULL ,
+ `LinkProfileImage`  VARCHAR(200) ,
 
 PRIMARY KEY (`Username`)
 );
@@ -84,7 +81,7 @@ CREATE TABLE `Contract`
  `IDPackage`         INT NOT NULL ,
  `CreationDate`      DATE NOT NULL ,
  `ExpiredDate`       DATE NOT NULL ,
- `AdditionalComment` VARCHAR(100) ,
+ `AdditionalComment` VARCHAR(300) ,
  `IDContractStatus`  INT NOT NULL ,
  `PIB`               INT NOT NULL ,
 
@@ -114,7 +111,7 @@ CONSTRAINT `FK_218` FOREIGN KEY `fkIdx_218` (`PIB`) REFERENCES `Company` (`PIB`)
 
 CREATE TABLE `InContact`
 (
- `Username` VARCHAR(30) NOT NULL ,
+ `Username` VARCHAR(50) NOT NULL ,
  `PIB`      INT NOT NULL ,
 
 PRIMARY KEY (`Username`, `PIB`),
@@ -187,19 +184,19 @@ CONSTRAINT `FK_238` FOREIGN KEY `fkIdx_238` (`IDContract`) REFERENCES `Contract`
 
 CREATE TABLE `Lecture`
 (
- `IDLecture`          INT NOT NULL AUTO_INCREMENT ,
- `Username`           VARCHAR(30) NOT NULL ,
+ `Username`           VARCHAR(50) NOT NULL ,
  `PIB`                INT NOT NULL ,
+ `IDLecture`          INT NOT NULL AUTO_INCREMENT ,
  `TitleSerbian`       VARCHAR(50) NOT NULL ,
  `TItleEnglish`       VARCHAR(50) ,
- `DescriptionSerbian` VARCHAR(50) NOT NULL ,
- `DescriptionEnglish` VARCHAR(50) ,
+ `DescriptionSerbian` VARCHAR(300) NOT NULL ,
+ `DescriptionEnglish` VARCHAR(300) ,
  `DateTime`           DATETIME NOT NULL ,
  `Hall`               VARCHAR(50) NOT NULL ,
- `FirstName`          VARCHAR(30) NOT NULL ,
- `SecondName`         VARCHAR(30) NOT NULL ,
- `Biography`          VARCHAR(200) ,
- `FilePath`           VARCHAR(100) ,
+ `FirstName`          VARCHAR(50) NOT NULL ,
+ `LastName`           VARCHAR(50) NOT NULL ,
+ `Biography`          VARCHAR(300) ,
+ `FilePath`           VARCHAR(200) ,
 
 PRIMARY KEY (`IDLecture`),
 KEY `fkIdx_179` (`Username`, `PIB`),
@@ -210,14 +207,14 @@ CONSTRAINT `FK_179` FOREIGN KEY `fkIdx_179` (`Username`, `PIB`) REFERENCES `InCo
 
 CREATE TABLE `Advertisement`
 (
- `IDAdvertisement` INT NOT NULL AUTO_INCREMENT ,
- `Username`        VARCHAR(30) NOT NULL ,
+ `Username`        VARCHAR(50) NOT NULL ,
  `PIB`             INT NOT NULL ,
- `Type`            INT NOT NULL ,
- `Title`           VARCHAR(50) NOT NULL ,
- `Description`     VARCHAR(150) NOT NULL ,
+ `IDAdvertisement` INT NOT NULL AUTO_INCREMENT ,
+ `Title`           VARCHAR(70) NOT NULL ,
+ `Description`     VARCHAR(250) NOT NULL ,
  `CreationTime`    DATETIME NOT NULL ,
  `ExpireDate`      DATE NOT NULL ,
+ `Type`            INT NOT NULL ,
  `FilePath`        VARCHAR(200) ,
 
 PRIMARY KEY (`IDAdvertisement`),

@@ -14,6 +14,6 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'contractstatus',
-    timestamps: false,
+    timestamps: false
   });
 };

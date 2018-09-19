@@ -1,6 +1,9 @@
 var db = require('./db');
 // Load the full build.
 var _ = require('lodash');
+var md5 = require('md5');
+var fs = require('fs');
+var csvParser = require('csv-parser');
 
 exports.setup = function (app) {
     app.get('/', function (request, response) {
@@ -15,7 +18,7 @@ exports.setup = function (app) {
         db.userModel.findAll({
             where: {
                 Username: username,
-                Password: password
+                Password: md5(password)
             }
         }).then(function (result) {
             if (result.length === 0) {
@@ -31,22 +34,42 @@ exports.setup = function (app) {
     });
 
     app.post('/register', function (request, response) {
+        var linkProfilePicture = "";
+        var profilePicture = null;
+
+        if (request.files) {
+            profilePicture = request.files.RegistrationProfilePicture;
+            linkProfilePicture = './profile_picture/' + request.body.Username + '/' + profilePicture.name;
+        }
         db.userModel.create({
             Username: request.body.Username,
             FirstName: request.body.FirstName,
             LastName: request.body.LastName,
             Email: request.body.Email,
-            Password: request.body.Password,
+            Password: md5(request.body.Password),
             Gender: request.body.Gender,
             BirthDate: request.body.BirthDate,
             LinkedIn: request.body.LinkedIn,
+            LinkProfileImage: linkProfilePicture,
             RegistrationState: 'NEODOBREN',
             Type: 'CLAN_TIMA',
-            Status: 'STATUS',
         }).then(function () {
+            if (profilePicture) {
+                var dir = './profile_picture/' + request.body.Username;
+
+                if (!fs.existsSync(dir)) {
+                    fs.mkdirSync(dir);
+                }
+
+                profilePicture.mv('./profile_picture/' + request.body.Username + '/' + profilePicture.name, function (err) {
+                    if (err)
+                        return res.status(500).send(err);
+                });
+            }
             response.statusCode = 200;
             response.end();
         }).catch(function (err) {
+            console.log(err);
             response.statusCode = 401;
             response.end();
         });
@@ -168,33 +191,20 @@ exports.setup = function (app) {
             ]
         });
     });
-    
+
     app.get('/logout', function (req, res) {
         delete req.session.username;
         res.redirect('/');
     });
 
     app.post('/create-company', function (request, response) {
-        var fs = require('fs');
-        var dir = './company_logo/' + request.body.CompanyPIB;
+        var logoLink = "";
+        var logoFile = null;
 
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir);
-        }
-
-        let logoFile;
         if (request.files) {
             logoFile = request.files.CompanyLogo;
-
-            console.log(logoFile);
-
-            logoFile.mv('./company_logo/' + request.body.CompanyPIB + '/' + logoFile.name, function (err) {
-                if (err)
-                    return res.status(500).send(err);
-            });
+            logoLink = './company_logo/' + request.body.CompanyPIB + '/' + logoFile.name;
         }
-
-        console.log(request.body);
 
         db.companyModel.create({
             Name: request.body.CompanyName,
@@ -205,13 +215,46 @@ exports.setup = function (app) {
             Country: request.body.CompanyCountry,
             Description: request.body.CompanyDescription,
             Website: request.body.CompanyWebsite,
-            Logo: './company_logo/' + request.body.CompanyPIB + '/' + logoFile.name
+            Logo: logoLink
         }).then(function (newCompany) {
             newCompany.createBankaccount({
                 IDBankAccount: request.body.CompanyBankAccount,
-                PIB: request.body.PIB,
+                PIB: request.body.CompanyPIB,
                 Currency: request.body.CompanyCurrency
             });
+
+            newCompany.createIncontact({
+                PIB: request.body.CompanyPIB,
+                Username: request.session.username
+            })
+
+            request.body.CompanyEmail.forEach(element => {
+                newCompany.createEmail({
+                    Email: element,
+                    PIB: request.body.CompanyPIB
+                })
+            });
+
+            newCompany.createContact({
+                FirstName: request.body.CompanyContactPersonFirstName,
+                LastName: request.body.CompanyContactPersonLastName,
+                Telephone: request.body.CompanyContactPersonTelephone,
+                Email: request.body.CompanyContactPersonEmail,
+                PIB: request.body.CompanyPIB
+            })
+
+            if (logoFile) {
+                var dir = './company_logo/' + request.body.CompanyPIB;
+
+                if (!fs.existsSync(dir)) {
+                    fs.mkdirSync(dir);
+                }
+
+                logoFile.mv('./company_logo/' + request.body.CompanyPIB + '/' + logoFile.name, function (err) {
+                    if (err)
+                        return res.status(500).send(err);
+                });
+            }
 
             response.statusCode = 200;
             response.end();
@@ -220,82 +263,301 @@ exports.setup = function (app) {
             response.statusCode = 401;
             response.end();
         });
-});
-
-app.post('/add-company-advertisement', function (request, response) {
-    
-});
-
-app.get('/search-company', function (request, response) {
-    var packageName = request.query.SearchPackageName;
-    var companyName = request.query.SearchCompanyName;
-    var onlyWithValidContract = request.query.SearchOnlyWithValidContract;
-
-    db.contractModel.findAll({
-        attributes: [],
-        include: [
-            {
-                model: db.companyModel,
-                attributes: ['PIB', 'Name'],
-                where: {
-                    Name: db.sequelize.where(
-                        db.sequelize.fn('LOWER', db.sequelize.col('Company.Name')),
-                        'LIKE', '%' + companyName.toLowerCase() + '%')
-                }
-            },
-            {
-                model: db.packageModel,
-                attributes: [],
-                where: {
-                    Name: db.sequelize.where(
-                        db.sequelize.fn('LOWER', db.sequelize.col('Package.Name')),
-                        'LIKE', '%' + packageName.toLowerCase() + '%')
-                }
-            }
-        ]
-    }).then(function (result) {
-        var uniqueList = _.uniqBy(result, 'company.PIB');
-        response.statusCode = 200;
-        response.send({
-            companyList: uniqueList
-        });
-    })
-
-});
-
-app.get('/company-info/:PIB', function (request, response) {
-    var PIB = request.params.PIB;
-    db.companyModel.findAll({
-        include: [
-            {
-                model: db.contractModel,
-                include: [
-                    {
-                        model: db.packageModel
-                    }
-                ],
-            },
-            {
-                model: db.bankAccountModel,
-            },
-            {
-                model: db.emailModel,
-            },
-            {
-                model: db.contactModel,
-            }
-        ],
-        where: {
-            PIB: PIB
-        }
-    }).then(function (result) {
-        response.statusCode = 200;
-        console.log(JSON.stringify(result));
-        if (result.length > 0) {
-            response.render('company-info', { company: result[0] });
-        }
-    }).catch(function (err) {
-        response.statusCode = 401;
     });
-});
+
+    app.post('/add-company-advertisement-json', function (request, response) {
+        var index = request.rawHeaders.indexOf('Referer');
+        if (index < 0) {
+            response.statusCode = 401;
+            response.send();
+        }
+
+        console.log(JSON.stringify(request.body));
+
+        var hostUrl = request.rawHeaders[index + 1];
+        var splittedUrl = hostUrl.split("/")
+        var pib = splittedUrl[splittedUrl.length - 1];
+
+        var jsonFile = null
+
+        if (request.files) {
+            jsonFile = request.files.AddAdvertisementJsonFile;
+        } else {
+            response.statusCode = 401;
+            response.send();
+        }
+
+        if (!jsonFile) {
+            response.statusCode = 401;
+            response.send();
+        }
+
+        var json = JSON.parse(jsonFile.data.toString());
+
+        if (json.Oglasi) {
+            json.Oglasi.forEach(element => {
+                var type = {
+                    "posao": 1,
+                    "praksa": 2,
+                    "praksa/posao": 3
+                }
+
+                db.advertisementModel.create({
+                    Username: request.session.username,
+                    PIB: pib,
+                    Title: element.Pozicija,
+                    Description: element.Opis,
+                    Type: type[element.Tip],
+                    ExpireDate: element.RokPrijave,
+                    CreationTime: new Date().toISOString().slice(0, 10)
+                }).then(function () {
+                }).catch(function(err) {
+                    console.log(err);
+                    response.statusCode = 401;
+                    response.send();
+                });
+            });
+        }
+    });
+
+    app.post('/add-company-advertisement', function (request, response) {
+        var index = request.rawHeaders.indexOf('Referer');
+        if (index < 0) {
+            response.statusCode = 401;
+            response.send();
+        }
+
+        console.log(JSON.stringify(request.body));
+
+        var hostUrl = request.rawHeaders[index + 1];
+        var splittedUrl = hostUrl.split("/")
+        var pib = splittedUrl[splittedUrl.length - 1];
+
+        var linkAdvertFile = "";
+        var advertFile = null;
+
+        if (request.files) {
+            advertFile = request.files.AddAdvertisementFile;
+            linkAdvertFile = './advertisements/' + new Date().getTime() + '/';
+        }
+        db.advertisementModel.create({
+            Username: request.session.username,
+            PIB: pib,
+            Title: request.body.AddAdvertisementTitle,
+            Description: request.body.AddAdvertisementDesc,
+            Type: request.body.AddAdvertisementType,
+            ExpireDate: request.body.AddAdvertisementExpiredDate,
+            CreationTime: new Date().toISOString().slice(0, 10),
+            FilePath: ((advertFile) ? linkAdvertFile + advertFile.name : "")
+        }).then(function () {
+            if (advertFile) {
+                var dir = linkAdvertFile;
+
+                if (!fs.existsSync(dir)) {
+                    fs.mkdirSync(dir);
+                }
+
+                advertFile.mv(linkAdvertFile + advertFile.name, function (err) {
+                    if (err)
+                        return res.status(500).send(err);
+                });
+            }
+            response.statusCode = 200;
+            response.end();
+        }).catch(function (err) {
+            console.log(err);
+            response.statusCode = 401;
+            response.end();
+        });
+    });
+
+    app.post('/add-company-lecture-csv', function (request, response) {
+        var index = request.rawHeaders.indexOf('Referer');
+        if (index < 0) {
+            response.statusCode = 401;
+            response.send();
+        }
+
+        var hostUrl = request.rawHeaders[index + 1];
+        var splittedUrl = hostUrl.split("/")
+        var pib = splittedUrl[splittedUrl.length - 1];
+
+        var csvFile = null
+
+        if (request.files) {
+            csvFile = request.files.AddLectureCsvFile;
+            if (csvFile) {
+                csvFile.mv('./temp/' + csvFile.name, function (err) {
+                    if (err)
+                        return res.status(500).send(err);
+                });
+            }
+        } else {
+            response.statusCode = 401;
+            response.send();
+        }
+
+        fs.createReadStream('./temp/' + csvFile.name)
+            .pipe(csvParser())
+            .on('data', function (data) {
+                try {
+                    console.log(data);
+
+                    console.log(data.Naslov);
+
+                    db.lectureModel.create({
+                        Username: request.session.username,
+                        PIB: pib,
+                        TitleSerbian: data.Naslov,
+                        TItleEnglish: data.Title,
+                        DescriptionSerbian: data.Opis,
+                        DescriptionEnglish: data.Description,
+                        Hall: data.Sala,
+                        DateTime: data.Datum + " " + data.Vreme,
+                        FirstName: data.Predavac.substr(0, data.Predavac.indexOf(' ')),
+                        LastName: data.Predavac.substr(data.Predavac.indexOf(' ') + 1),
+                    }).then(function () {
+                    }).catch(function (err) {
+                        console.log(err);
+                        response.statusCode = 401;
+                        response.end();
+                    });
+                }
+                catch (err) {
+                    console.log(err);
+                    response.statusCode = 401;
+                    response.end();
+                }
+            })
+            .on('end', function () {
+                response.statusCode = 200;
+                response.end();
+            });
+    });
+
+    app.post('/add-company-lecture', function (request, response) {
+        var index = request.rawHeaders.indexOf('Referer');
+        if (index < 0) {
+            response.statusCode = 401;
+            response.send();
+        }
+
+        var hostUrl = request.rawHeaders[index + 1];
+        var splittedUrl = hostUrl.split("/")
+        var pib = splittedUrl[splittedUrl.length - 1];
+
+        var linkLectureFile = "";
+        var lectureFile = null;
+
+        if (request.files) {
+            lectureFile = request.files.LectureFile;
+            linkLectureFile = './lectures/' + new Date().getTime() + '/';
+        }
+        db.lectureModel.create({
+            Username: request.session.username,
+            PIB: pib,
+            TitleSerbian: request.body.LectureTitle,
+            TItleEnglish: request.body.LectureTitleEnglish,
+            DescriptionSerbian: request.body.LectureDescription,
+            DescriptionEnglish: request.body.LectureDescriptionEnglish,
+            Hall: request.body.LectureHall,
+            DateTime: request.body.LectureDate + " " + request.body.LectureTime,
+            FirstName: request.body.LectureFirstName,
+            LastName: request.body.LectureLastName,
+            Biography: request.body.LectureBiography,
+            FilePath: ((lectureFile) ? linkLectureFile + lectureFile.name : "")
+        }).then(function () {
+            if (lectureFile) {
+                var dir = linkLectureFile;
+
+                if (!fs.existsSync(dir)) {
+                    fs.mkdirSync(dir);
+                }
+
+                lectureFile.mv(linkLectureFile + lectureFile.name, function (err) {
+                    if (err)
+                        return res.status(500).send(err);
+                });
+            }
+            response.statusCode = 200;
+            response.end();
+        }).catch(function (err) {
+            console.log(err);
+            response.statusCode = 401;
+            response.end();
+        });
+    });
+
+    app.get('/search-company', function (request, response) {
+        var packageName = request.query.SearchPackageName;
+        var companyName = request.query.SearchCompanyName;
+        var onlyWithValidContract = request.query.SearchOnlyWithValidContract;
+
+        db.contractModel.findAll({
+            attributes: [],
+            include: [
+                {
+                    model: db.companyModel,
+                    attributes: ['PIB', 'Name'],
+                    where: {
+                        Name: db.sequelize.where(
+                            db.sequelize.fn('LOWER', db.sequelize.col('Company.Name')),
+                            'LIKE', '%' + companyName.toLowerCase() + '%')
+                    }
+                },
+                {
+                    model: db.packageModel,
+                    attributes: [],
+                    where: {
+                        Name: db.sequelize.where(
+                            db.sequelize.fn('LOWER', db.sequelize.col('Package.Name')),
+                            'LIKE', '%' + packageName.toLowerCase() + '%')
+                    }
+                }
+            ]
+        }).then(function (result) {
+            var uniqueList = _.uniqBy(result, 'company.PIB');
+            response.statusCode = 200;
+            response.send({
+                companyList: uniqueList
+            });
+        })
+
+    });
+
+    app.get('/company-info/:PIB', function (request, response) {
+        var PIB = request.params.PIB;
+        db.companyModel.findAll({
+            include: [
+                {
+                    model: db.contractModel,
+                    include: [
+                        {
+                            model: db.packageModel
+                        }
+                    ],
+                },
+                {
+                    model: db.bankAccountModel,
+                },
+                {
+                    model: db.emailModel,
+                },
+                {
+                    model: db.contactModel,
+                }
+            ],
+            where: {
+                PIB: PIB
+            }
+        }).then(function (result) {
+            response.statusCode = 200;
+            console.log(JSON.stringify(result));
+            if (result.length > 0) {
+                response.render('company-info', { company: result[0] });
+            }
+        }).catch(function (err) {
+            response.statusCode = 401;
+        });
+    });
 }

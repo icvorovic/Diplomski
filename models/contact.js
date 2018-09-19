@@ -34,6 +34,6 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'contact',
-    timestamps: false,
+    timestamps: false
   });
 };

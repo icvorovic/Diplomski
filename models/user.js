@@ -3,24 +3,24 @@
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('user', {
     Username: {
-      type: DataTypes.STRING(30),
+      type: DataTypes.STRING(50),
       allowNull: false,
       primaryKey: true
     },
     FirstName: {
-      type: DataTypes.STRING(30),
-      allowNull: false
-    },
-    LastName: {
-      type: DataTypes.STRING(30),
-      allowNull: false
-    },
-    Email: {
       type: DataTypes.STRING(50),
       allowNull: false
     },
+    LastName: {
+      type: DataTypes.STRING(50),
+      allowNull: false
+    },
+    Email: {
+      type: DataTypes.STRING(70),
+      allowNull: false
+    },
     Password: {
-      type: DataTypes.STRING(30),
+      type: DataTypes.STRING(50),
       allowNull: false
     },
     Gender: {
@@ -33,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     LinkedIn: {
       type: DataTypes.STRING(100),
-      allowNull: false
+      allowNull: true
     },
     RegistrationState: {
       type: DataTypes.STRING(30),
@@ -43,12 +43,12 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(30),
       allowNull: false
     },
-    Status: {
-      type: DataTypes.STRING(30),
-      allowNull: false
+    LinkProfileImage: {
+      type: DataTypes.STRING(200),
+      allowNull: true
     }
   }, {
     tableName: 'user',
-    timestamps: false,
+    timestamps: false
   });
 };

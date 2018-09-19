@@ -29,6 +29,6 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'donatecontract',
-    timestamps: false,
+    timestamps: false
   });
 };
