@@ -10,30 +10,44 @@ function initDatePicker() {
   $('.datepicker').datepicker({
     format: 'yyyy-mm-dd',
     yearRange: 1900,
-    months: [
-      'Januar',
-      'Februar',
-      'Mart',
-      'April',
-      'Maj',
-      'Jun',
-      'Jul',
-      'Avgust',
-      'Septembar',
-      'Oktobar',
-      'Novembar',
-      'Decembar'
-    ],
-    weekdays: [
-      'Nedelja',
-      'Ponedeljak',
-      'Utorak',
-      'Sreda',
-      'Cetvrtak',
-      'Petak',
-      'Subota'
-    ]
+    i18n: {
+      months: [
+        'Januar',
+        'Februar',
+        'Mart',
+        'April',
+        'Maj',
+        'Jun',
+        'Jul',
+        'Avgust',
+        'Septembar',
+        'Oktobar',
+        'Novembar',
+        'Decembar'
+      ],
+      weekdays: [
+        'Nedelja',
+        'Ponedeljak',
+        'Utorak',
+        'Sreda',
+        'Cetvrtak',
+        'Petak',
+        'Subota'
+      ],
+      weekdaysAbbrev: [
+        'N', 'P', 'U', 'S', 'C', 'P', 'S'
+      ]
+    }
   });
+}
+
+function addPackageItem(element) {
+  var html = $(element).parent().parent().clone();
+  $(element).parent().parent().parent().append(html);
+}
+
+function removePackageItem(element) {
+  $(element).parent().parent().remove();
 }
 
 function showErrorMessage(elementId, messageText) {
@@ -156,6 +170,18 @@ function changePassword() {
   sendFormRequest("changePasswordForm", "POST", "/change-password", "Uspesno ste promenili sifru!", "Neispravni kredencijali!");
 }
 
+function addMoneyContract() {
+  sendFormRequest("addMoneyContractForm", "POST", "/add-money-contract", "Uspesno ste dodali ugovor!", "Neispravni podaci!");
+}
+
+function addDonateContract() {
+  sendFormRequest("addDonateContractForm", "POST", "/add-donate-contract", "Uspesno ste dodali ugovor!", "Neispravni podaci!");
+}
+
+function addPackage() {
+  sendFormRequest("addPackageForm", "POST", "/add-package-", "Uspesno ste dodali ugovor!", "Neispravni podaci!");
+}
+
 function addCompany() {
   sendFormRequest("createCompanyForm", "POST", "/create-company", "Uspesno ste dodali kompaniju!", "Neispravni podaci!");
 }
@@ -174,6 +200,29 @@ function addLectureCsv() {
 
 function addAdvertisementJson() {
   sendFormRequest("addAdvertisementJsonForm", "POST", "/add-company-advertisement-json", "Uspesno ste dodali oglase!", "Izaberite odgovarajuci fajl!");
+}
+
+function approveRegisterRequest(element, username) {
+  changeUserStatus(username, 'ODOBREN');
+  $(element).parent().parent().fadeOut("slow");
+}
+
+function declineRegisterRequest(element, username) {
+  changeUserStatus(username, 'ODBIJEN');
+  $(element).parent().parent().fadeOut("slow");
+}
+
+function changeUserStatus(username, state) {
+  var url = '/update-user-status';
+
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: {
+      Username: username,
+      RegistrationState: state
+    }
+  });
 }
 
 function searchCompany() {

@@ -16,17 +16,13 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(30),
       allowNull: false
     },
-    Type: {
-      type: DataTypes.STRING(30),
-      allowNull: false
-    },
     Price: {
       type: DataTypes.INTEGER(11),
       allowNull: false
     },
     Description: {
       type: DataTypes.STRING(250),
-      allowNull: false
+      allowNull: true
     },
     Duration: {
       type: DataTypes.INTEGER(11),

@@ -1,0 +1,37 @@
+<div class="col s12 m8 offset-m2 mt-10">
+  <table>
+    <thead>
+      <tr>
+        <th>Ime</th>
+        <th>Prezime</th>
+        <th>Korisnicko ime</th>
+        <th>Datum rodjenja</th>
+        <th colspan="2"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (var i = 0; i < registerRequests.length; i++) { %>
+        <tr>
+          <td><%= registerRequests[i].FirstName %></td>
+          <td><%= registerRequests[i].LastName %></td>
+          <td><%= registerRequests[i].Username %></td>
+          <td><%= registerRequests[i].BirthDate %></td>
+          <td>
+            <button type="button" 
+                    class="green white-text btn waves-effect waves-light" 
+                    onclick="approveRegisterRequest(this,'<%= registerRequests[i].Username %>')">
+              Odobri
+            </button>
+          </td>
+          <td>
+            <button type="button" 
+                    class="red white-text btn waves-effect waves-light" 
+                    onclick="declineRegisterRequest(this,'<%= registerRequests[i].Username %>')">
+              Odbaci
+            </button>
+          </td>
+        </tr>
+        <% } %>
+    </tbody>
+  </table>
+</div>

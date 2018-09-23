@@ -1,22 +1,25 @@
-<div class="col s12 m8 l6 offset-m2 offset-l3">
+<div class="col s12 m6">
   <ul class="collapsible">
     <li>
       <div class="collapsible-header">
         <i class="material-icons">money</i>Novcani ugovor</div>
       <div class="collapsible-body">
         <div class="row">
-          <form class="col s10 offset-s1" name="addMoneyContract" encType="multipart/form-data">
+          <form class="col s10 offset-s1" name="addMoneyContractForm" encType="multipart/form-data">
+            <div class="row mb0">
+              <div class="input-field col s12">
+                <select class="required" name="moneyContractStatus">
+                  <% for (var i = 0; i < contractStatusList.length; i++) { %>
+                    <option value="<%= contractStatusList[i].IDContractStatus %>">
+                      <%= contractStatusList[i].Status %>
+                    </option>
+                    <% } %>
+                </select>
+                <label>Status ugovora*</label>
+              </div>
+            </div>
             <%- include("input_form", {
               formRows : [
-                [
-                  {
-                    id: "moneyContractCompanyName",
-                    type: "text",
-                    class: "required autocomplete",
-                    name: "MoneyContractCompanyName",
-                    label: "Naziv kompanije*"
-                  }
-                ],
                 [
                   {
                     id: "moneyContractPackageName",
@@ -46,27 +49,11 @@
                 ],
                 [
                   {
-                    id: "moneyContractInvoinceSent",
-                    type: "text",
-                    class: "required validate",
-                    name: "MoneyContractInvoinceSent",
-                    label: "Da li je faktura poslata?*"
-                  },
-                  {
-                    id: "moneyContractPaymentFinished",
-                    type: "text",
-                    class: "required validate",
-                    name: "MoneyContractPaymentFinished",
-                    label: "Da li je uplata izvrsena?*"
-                  }
-                ],
-                [
-                  {
                     id: "moneyContractPaymentDate",
                     type: "text",
-                    class: "required datepicker",
+                    class: "datepicker",
                     name: "MoneyContractPaymentDate",
-                    label: "Datum placanja*"
+                    label: "Datum placanja"
                   }
                 ],
                 [
@@ -80,6 +67,24 @@
                 ]
               ]
             }); %>
+              <div class="row">
+                <div class="col s6">
+                  <p>
+                    <label>
+                      <input type="checkbox" class="filled-in" checked="checked" name="MoneyContractIsPaymentFinished" />
+                      <span>Poslata faktura</span>
+                    </label>
+                  </p>
+                </div>
+                <div class="col s6">
+                  <p>
+                    <label>
+                      <input type="checkbox" class="filled-in" checked="checked" name="MoneyContractIsInvoiceSent" />
+                      <span>Izvrsena uplata</span>
+                    </label>
+                  </p>
+                </div>
+              </div>
           </form>
           <div class="row">
             <div class="input-field col s12 center-align">
@@ -94,93 +99,112 @@
               </div>
             </div>
           </div>
+          <div class="row">
+            <div class="col s10 offset-s1 center-align">
+              <div id="addMoneyContractFormSuccessMessage" class="success-message valign-wrapper">
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </li>
+  </ul>
+</div>
+<div class="col s12 m6">
+  <ul class="collapsible">
     <li>
       <div class="collapsible-header">
         <i class="material-icons">add</i>Donatorski ugovor</div>
       <div class="collapsible-body">
         <div class="row">
-          <form class="col s10 offset-s1" name="addDonateContract" encType="multipart/form-data">
+          <form class="col s10 offset-s1" name="addDonateContractForm" encType="multipart/form-data">
+            <div class="row mb0">
+              <div class="input-field col s12">
+                <select class="required" name="donateContractStatus">
+                  <% for (var i = 0; i < contractStatusList.length; i++) { %>
+                    <option value="<%= contractStatusList[i].IDContractStatus %>">
+                      <%= contractStatusList[i].Status %>
+                    </option>
+                    <% } %>
+                </select>
+                <label>Status ugovora*</label>
+              </div>
+            </div>
             <%- include("input_form", {
-                  formRows : [
-                    [
-                      {
-                        id: "donateContractCompanyName",
-                        type: "text",
-                        class: "required autocomplete",
-                        name: "DonateContractCompanyName",
-                        label: "Naziv kompanije*"
-                      }
-                    ],
-                    [
-                      {
-                        id: "donateContractPackageName",
-                        type: "text",
-                        class: "required validate",
-                        name: "DonateContractPackageName",
-                        label: "Naziv paketa*"
-                      }
-                    ],
-                    [
-                      {
-                        id: "donateContractValue",
-                        type: "text",
-                        class: "required number validate",
-                        name: "DonateContractValue",
-                        label: "Vrednost paketa*"
-                      }
-                    ],
-                    [
-                      {
-                        id: "donateContractDate",
-                        type: "text",
-                        class: "required datepicker",
-                        name: "DonateContractDate",
-                        label: "Datum*"
-                      }
-                    ],
-                    [
-                      {
-                        id: "donateContractDescription",
-                        type: "textarea",
-                        class: "required materialize-textarea",
-                        name: "DonateContractDescription",
-                        label: "Opis*"
-                      }
-                    ],
-                    [
-                      {
-                        id: "donateContractQuantity",
-                        type: "text",
-                        class: "number validate",
-                        name: "DonateContractQuantity",
-                        label: "Kolicina"
-                      }
-                    ],
-                    [
-                      {
-                        id: "donateContractDeliveryDate",
-                        type: "text",
-                        class: "required datepicker",
-                        name: "DonateContractDeliveryDate",
-                        label: "Datum isporuke*"
-                      }
-                    ]
+                formRows : [
+                  [
+                    {
+                      id: "donateContractPackageName",
+                      type: "text",
+                      class: "required validate",
+                      name: "DonateContractPackageName",
+                      label: "Naziv paketa*"
+                    }
+                  ],
+                  [
+                    {
+                      id: "donateContractValue",
+                      type: "text",
+                      class: "required number validate",
+                      name: "DonateContractValue",
+                      label: "Vrednost ugovora*"
+                    }
+                  ],
+                  [
+                    {
+                      id: "donateContractDate",
+                      type: "text",
+                      class: "required datepicker",
+                      name: "DonateContractDate",
+                      label: "Datum*"
+                    }
+                  ],
+                  [
+                    {
+                      id: "donateContractDescription",
+                      type: "textarea",
+                      class: "required materialize-textarea",
+                      name: "DonateContractDescription",
+                      label: "Opis*"
+                    }
+                  ],
+                  [
+                    {
+                      id: "donateContractQuantity",
+                      type: "text",
+                      class: "number validate",
+                      name: "DonateContractQuantity",
+                      label: "Kolicina"
+                    }
+                  ],
+                  [
+                    {
+                      id: "donateContractDeliveryDate",
+                      type: "text",
+                      class: "required datepicker",
+                      name: "DonateContractDeliveryDate",
+                      label: "Datum isporuke*"
+                    }
                   ]
-                }); %>
+                ]
+              }); %>
           </form>
           <div class="row">
             <div class="input-field col s12 center-align">
-              <button class="btn waves-effect waves-light" onclick="addMoneyContract()">
+              <button class="btn waves-effect waves-light" onclick="addDonateContract()">
                 Dodaj
               </button>
             </div>
           </div>
           <div class="row">
             <div class="col s10 offset-s1 center-align">
-              <div id="addMoneyContractFormErrorMessage" class="error-message valign-wrapper">
+              <div id="addDonateContractFormErrorMessage" class="error-message valign-wrapper">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s10 offset-s1 center-align">
+              <div id="addDonateContractFormSuccessMessage" class="success-message valign-wrapper">
               </div>
             </div>
           </div>

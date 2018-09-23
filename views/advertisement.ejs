@@ -38,40 +38,53 @@
         <h4 class="center-align">OGLASI ZA PRAKSU I POSAO</h4>
         <div class="row">
           <div class="col s12">
-            <% for(var i=0; i < advertisement.length; i++) { %>
+            <% for(var i=0; i < advertisements.length; i++) { %>
               <div class="row border">
                 <div class="col s8 border-right">
                   <h5>
-                    <%= advertisement[i].Title %>
+                    <%= advertisements[i].Title %>
                   </h5>
                   <table>
                     <tbody>
                       <tr>
                         <td class="left-td">Opis</td>
                         <td>
-                          <%= advertisement[i].Description %>
+                          <%= advertisements[i].Description %>
                         </td>
                       </tr>
                       <tr>
                         <td class="left-td">Naziv kompanije</td>
                         <td>
-                            <%= advertisement[i].CompanyName %>
+                            <%= advertisements[i].incontact.company.Name %>
                         </td>
                       </tr>
                       <tr>
                         <td class="left-td">Tip oglasa</td>
                         <td>
-                            <%= advertisement[i].Type %>
+                          <% if (advertisements[i].Type === 1) { %>
+                            Posao
+                          <% } %>
+                          <% if (advertisements[i].Type === 2) { %>
+                            Praksa
+                          <% } %>
+                          <% if (advertisements[i].Type === 3) { %>
+                            Posao/Praksa
+                          <% } %>
                         </td>
                       </tr>
                       <tr>
                         <td class="left-td">Vazi do</td>
                         <td>
-                          <%= advertisement[i].ExpiredDate %>
+                          <%= advertisements[i].ExpireDate %>
                         </td>
                       </tr>
                     </tbody>
                   </table>
+                </div>
+                <div class="company-logo-wrapper col s4">
+                  <div class="company-logo-large" >
+                      <img src="<%= advertisements[i].incontact.company.Logo %>">
+                  </div>
                 </div>
               </div>
               <% } %>

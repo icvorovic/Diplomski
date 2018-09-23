@@ -10,14 +10,8 @@
     $('.timepicker').timepicker({
       twelveHour: false
     });
-    $('input.autocomplete').autocomplete({
-      data: {
-        "Apple": null,
-        "Microsoft": null,
-        "Google": 'https://placehold.it/250x250'
-      },
-    });
     $('.collapsible').collapsible();
+    $('select').formSelect();
     initDatePicker();
     $('.stepper').activateStepper({
       linearStepsNavigation: true, //allow navigation by clicking on the next and previous steps on linear steppers
@@ -34,13 +28,16 @@
       <div class="col s12 m10 offset-m1">
         <ul id="tabs-swipe-demo" class="tabs">
           <li class="tab col s3">
-            <a href="#tab-company-info">O kompaniji</a>
+            <a class="active" href="#tab-company-info">O kompaniji</a>
           </li>
-          <li class="tab col s3">
+          <li class="tab col s2">
             <a href="#test-add-advertisement">Dodaj oglas</a>
           </li>
           <li class="tab col s3">
             <a href="#test-add-lecture">Dodaj predavanje</a>
+          </li>
+          <li class="tab col s2">
+            <a href="#tab-add-contract">Dodaj ugovor</a>
           </li>
         </ul>
         <div id="tab-company-info" class="col s12 tab-content">
@@ -151,7 +148,6 @@
                     </table>
             </div>
             <div class="col s12 m6">
-              <h5 class="center-align">Ugovori</h5>
               <table class="highlight">
                 <thead>
                   <th>Vrsta paketa</th>
@@ -181,7 +177,10 @@
           <% include tab-add-advertisement.ejs %>
         </div>
         <div id="test-add-lecture" class="col s12 tab-content">
-          <%- include("tab-add-lecture") %>
+          <% include tab-add-lecture.ejs %>
+        </div>
+        <div id="tab-add-contract" class="col s12 tab-content">
+          <%- include("tab-add-contract", {contractStatusList: contractStatusList}) %>
         </div>
       </div>
     </div>

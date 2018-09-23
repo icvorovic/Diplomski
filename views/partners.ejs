@@ -34,45 +34,45 @@
                     </div>
                 </form>
                 <div class="row">
-                    <% for(var i=0; i < partnerPackages.length; i++) { %>
-                        <a>
-                            <div class="col s3 partner-package">
-                                <%= partnerPackages[i] %>
+                    <% for (var package in partnerPackages) { %>
+                        <a class="partner-package waves-effect waves-light btn-large"
+                           href="#<%= package %>">
+                            <div class="col s3 ">
+                                <%= package %>
                             </div>
                         </a>
-                        <% } %>
+                    <% } %>
                 </div>
-                <table class="highlight">
-                    <thead>
-                        <tr>
-                            <th>Naziv kategorije</th>
-                            <th>Naziv kompanije</th>
-                            <th>Logo kompanije</th>
-                            <th>Kratak opis</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr>
-                            <td>Alvin</td>
-                            <td>Eclair</td>
-                            <td>$0.87</td>
-                            <td>Opis</td>
-                        </tr>
-                        <tr>
-                            <td>Alan</td>
-                            <td>Jellybean</td>
-                            <td>$3.76</td>
-                            <td>Opis</td>
-                        </tr>
-                        <tr>
-                            <td>Jonathan</td>
-                            <td>Lollipop</td>
-                            <td>$7.00</td>
-                            <td>Opis</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <% for (var package in partnerPackages) { %>
+                    <table id="<%= package %>" class="highlight">
+                        <thead>
+                            <tr>
+                                <th>Naziv kategorije</th>
+                                <th>Naziv kompanije</th>
+                                <th>Logo kompanije</th>
+                                <th>Kratak opis</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for (var i = 0; i < partnerPackages[package].length; i++) { %>
+                            <tr>
+                                <td><%= package %></td>
+                                <td>
+                                    <a href="http://<%= partnerPackages[package][i].company.Website %>" target="_blank">
+                                        <%= partnerPackages[package][i].company.Name %>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="http://<%= partnerPackages[package][i].company.Website %>" target="_blank">
+                                        <img class="company-logo-small" src="<%= partnerPackages[package][i].company.Logo %>"/>
+                                    </a>
+                                </td>
+                                <td><%= partnerPackages[package][i].company.Description %></td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                <% } %>
             </div>
         </div>
         <% include footer.ejs %>

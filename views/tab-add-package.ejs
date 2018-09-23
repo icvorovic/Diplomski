@@ -1,0 +1,80 @@
+<form class="col s12 m8 l6 offset-m2 offset-l3" name="addPackageForm">
+  <%- include("input_form", {
+        formRows: [
+            [
+              {
+                id: "addPackageName",
+                type: "text",
+                class: "required validate",
+                name: "AddPackageName",
+                label: "Naziv*"
+              }
+            ],
+            [
+              {
+                id: "addPackagePrice",
+                type: "text",
+                class: "required validate",
+                name: "AddPackagePrice",
+                label: "Vrednost paketa u EUR*"
+              }
+            ],
+            [
+              {
+                id: "addPackageDuration",
+                type: "text",
+                class: "required validate",
+                name: "AddPackageDuration",
+                label: "Trajanje paketa (broj godina)*"
+              }
+            ], 
+            [
+              {
+                id: "addPackageMaxCompanyNumber",
+                type: "text",
+                class: "required validate",
+                name: "AddPackageMaxCompanyNumber",
+                label: "Maksimalan broj kompanija*"
+              }
+            ], 
+          ]
+      }); %>
+    <h6>Stavke paketa</h6>
+    <div class="row">
+      <div class="input-field col s4 center-align">
+        <input type="text" class="validate required" name="AddPackageItemName" placeholder="Ime stavke">
+      </div>
+      <div class="input-field col s4 center-align">
+        <input type="text" class="validate required" name="AddPackageItemDescription" placeholder="Opis stavke">
+      </div>
+      <div class="input-field col s2 center-align">
+        <button type="button" class="btn waves-effect waves-light" onclick="addPackageItem(this)">
+          Dodaj stavku
+        </button>
+      </div>
+      <div class="input-field col s2 center-align">
+        <button type="button" class="btn waves-effect waves-light" onclick="removePackageItem(this)">
+          Izbaci stavku
+        </button>
+      </div>
+    </div>
+</form>
+<div class="row">
+  <div class="input-field col s12 center-align">
+    <button class="btn waves-effect waves-light" onclick="addPackage()">
+      Dodaj
+    </button>
+  </div>
+</div>
+<div class="row">
+  <div class="col s10 offset-s1 center-align">
+    <div id="addPackageFormErrorMessage" class="error-message valign-wrapper">
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col s10 offset-s1 center-align">
+    <div id="addPackageFormSuccessMessage" class="success-message valign-wrapper">
+    </div>
+  </div>
+</div>

@@ -12,6 +12,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(150),
       allowNull: false
     },
+    Name: {
+      type: DataTypes.STRING(50),
+      allowNull: false
+    },
     IDPackage: {
       type: DataTypes.INTEGER(11),
       allowNull: false,

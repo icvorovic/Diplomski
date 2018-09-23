@@ -1,6 +1,6 @@
 <div class="row">
   <div id="timeline" class="col s12">
-    <% include timeline_diagram.ejs %>
+    <%- include("timeline_diagram",  {mostRecentNextSixMonthContracts: mostRecentNextSixMonthContracts}) %>
   </div>
   <div class="row">
     <div class="col s6 l4 offset-l2">
@@ -8,16 +8,20 @@
       <table>
         <thead>
           <th>Naziv kompanije</th>
-          <th>Datum potpisa</th>
+          <th>Datum</th>
+          <th>Detalji</th>
         </thead>
         <tbody>
-          <% for(var i=0; i < mostRecentCreatedContracts.length; i++) { %>
+          <% for(var i=0; i < mostRecentPreviousSixMonthContracts.length; i++) { %>
             <tr>
               <td>
-                <%= mostRecentCreatedContracts[i].CompanyName %>
+                <%= mostRecentPreviousSixMonthContracts[i].company.Name %>
               </td>
               <td>
-                <%= mostRecentCreatedContracts[i].CreatedDate %>
+                <%= mostRecentPreviousSixMonthContracts[i].CreationDate %>
+              </td>
+              <td>
+                <a href="<%= mostRecentPreviousSixMonthContracts[i].company.PIB %>">Detalji</a>
               </td>
             </tr>
             <% } %>
@@ -29,16 +33,20 @@
       <table>
         <thead>
           <th>Naziv kompanije</th>
-          <th>Datum isteka</th>
+          <th>Datum</th>
+          <th>Detalji</th>
         </thead>
         <tbody>
-          <% for(var i=0; i < mostRecentExpiredContracts.length; i++) { %>
+          <% for(var i=0; i < mostRecentNextSixMonthContracts.length; i++) { %>
             <tr>
               <td>
-                <%= mostRecentExpiredContracts[i].CompanyName %>
+                <%= mostRecentNextSixMonthContracts[i].company.Name %>
               </td>
               <td>
-                <%= mostRecentExpiredContracts[i].ExpiredDate %>
+                <%= mostRecentNextSixMonthContracts[i].ExpiredDate %>
+              </td>
+              <td>
+                <a href="<%= mostRecentNextSixMonthContracts[i].company.PIB %>">Detalji</a>
               </td>
             </tr>
             <% } %>

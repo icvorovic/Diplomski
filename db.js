@@ -40,6 +40,10 @@ db.packageItemModel = require('./models/packageitem')(sequelize, Sequelize);
 db.userModel = require('./models/user')(sequelize, Sequelize);  
 
 //Relations
+db.inContactModel.hasMany(db.advertisementModel, {
+  foreignKey: 'PIB',
+  targetKey: 'PIB',
+});
 db.packageModel.hasMany(db.contractModel, {
   foreignKey: 'IDPackage',
   targetKey: 'IDPackage'
@@ -108,5 +112,10 @@ db.packageItemModel.belongsTo(db.packageModel, {
   foreignKey: 'IDPackage',
   targetKey: 'IDPackage'
 });
+db.advertisementModel.belongsTo(db.inContactModel, {
+  foreignKey: 'PIB',
+  targetKey: 'PIB'
+})
+
 
 module.exports = db;  

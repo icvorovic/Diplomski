@@ -5,6 +5,17 @@ var md5 = require('md5');
 var fs = require('fs');
 var csvParser = require('csv-parser');
 
+const ADMIN_TYPE = 'ADMIN'
+const IT_MANAGER = 'IT_MANAGER';
+
+function isAdmin(request) {
+    return request.session.userType === ADMIN_TYPE;
+}
+
+function isManager(request) {
+    return request.session.userType === IT_MANAGER;
+}
+
 exports.setup = function (app) {
     app.get('/', function (request, response) {
         db.userModel.findAll().then(users => {
@@ -16,6 +27,7 @@ exports.setup = function (app) {
         var username = request.body.Username;
         var password = request.body.Password;
         db.userModel.findAll({
+            attributes: ['Username', 'Type'],
             where: {
                 Username: username,
                 Password: md5(password)
@@ -37,7 +49,8 @@ exports.setup = function (app) {
         var linkProfilePicture = "";
         var profilePicture = null;
 
-        if (request.files) {
+        if (request.files.length > 0) {
+            console.log("FIKES");
             profilePicture = request.files.RegistrationProfilePicture;
             linkProfilePicture = './profile_picture/' + request.body.Username + '/' + profilePicture.name;
         }
@@ -76,69 +89,155 @@ exports.setup = function (app) {
     });
 
     app.post('/change-password', function (request, response) {
-        var username = request.body.Username;
-        var password = request.body.Password;
-        var newPassword = request.body.NewPassword;
-
         db.userModel.update(
             {
-                Password: newPassword
+                Password: md5(request.body.NewPassword)
             },
             {
                 where: {
-                    Username: username,
-                    Password: password
+                    Username: request.body.Username,
+                    Password: md5(request.body.Password)
                 }
             }
-        )
-            .then(result => {
-                if (result > 0) {
-                    response.statusCode = 200;
-                    response.end();
-                } else {
-                    response.statusCode = 401;
-                    response.end();
-                }
-            })
-            .catch(err => {
+        ).then(result => {
+            if (result > 0) {
+                response.statusCode = 200;
+                response.end();
+            } else {
                 response.statusCode = 401;
                 response.end();
-            })
+            }
+        })
+        .catch(err => {
+            response.statusCode = 401;
+            response.end();
+        });
+    });
+
+    app.post('/update-user-status', function(request, response) {
+        db.userModel.update(
+            {
+                RegistrationState: request.body.RegistrationState
+            },
+            {
+                where: {
+                    Username: request.body.Username,
+                }
+            }
+        ).then(result => {
+            if (result > 0) {
+                response.statusCode = 200;
+                response.end();
+            } else {
+                response.statusCode = 401;
+                response.end();
+            }
+        })
+        .catch(err => {
+            response.statusCode = 401;
+            response.end();
+        });
     });
 
     app.get('/home', function (request, response) {
-        console.log(request.session);
-        db.userModel.findAll().then(users => {
+        db.contractModel.findAll({
+            include: [
+                {
+                    model: db.companyModel
+                }
+            ]
+        }).then(contracts => {
+            var mostRecentExpiredContracts = contracts;
+            mostRecentExpiredContracts = _.filter(mostRecentExpiredContracts, contract => {
+                return (new Date(contract.ExpiredDate)).getTime() > (new Date()).getTime();
+            });
+            mostRecentExpiredContracts = _.orderBy(mostRecentExpiredContracts, ['ExpiredDate'], ['asc']);
+            mostRecentExpiredContracts = _.slice(mostRecentExpiredContracts, 0, 5);
 
-        });
-        response.render('home', {
-            mostRecentExpiredContracts: [
-                {
-                    CompanyName: "KOMPANIJA 4",
-                    ExpiredDate: "2018-07-20",
-                },
-                {
-                    CompanyName: "KOMPANIJA 3",
-                    ExpiredDate: "2018-07-20",
-                },
-            ],
-            mostRecentCreatedContracts: [
-                {
-                    CompanyName: "KOMPANIJA 1",
-                    CreatedDate: "2018-07-20",
-                },
-                {
-                    CompanyName: "KOMPANIJA 2",
-                    CreatedDate: "2018-07-20",
-                },
-            ],
+            var mostRecentCreatedContracts = contracts;
+            mostRecentCreatedContracts = _.filter(mostRecentCreatedContracts, contract => {
+                return (new Date(contract.CreationDate)).getTime() < (new Date()).getTime();
+            });
+            mostRecentCreatedContracts = _.orderBy(mostRecentCreatedContracts, ['CreationDate'], ['desc']);
+            mostRecentCreatedContracts = _.slice(mostRecentCreatedContracts, 0, 5);
+
+            request.session.userType = ADMIN_TYPE;
+            if (isAdmin(request) || isManager(request)) {
+                db.userModel.findAll({
+                    where : {
+                        RegistrationState: 'NEODOBREN'
+                    }
+                }).then(registerRequests => {
+                    if (isManager(request)) {
+                        registerRequests = [];
+                    }
+
+                    console.log(registerRequests);
+
+                    var mostRecentNextSixMonthContracts = contracts;
+                    mostRecentNextSixMonthContracts = _.filter(mostRecentNextSixMonthContracts, contract => {
+                        var currentDate = new Date();
+                        var sixMonthDate = new Date()
+                        sixMonthDate.setMonth(sixMonthDate.getMonth() + 6);
+                        return (new Date(contract.ExpiredDate)).getTime() > currentDate.getTime()
+                            && (new Date(contract.ExpiredDate)).getTime() < sixMonthDate.getTime();
+                    });
+                    mostRecentNextSixMonthContracts = _.orderBy(mostRecentNextSixMonthContracts, ['ExpiredDate'], ['asc']);
+                    mostRecentNextSixMonthContracts = _.slice(mostRecentNextSixMonthContracts, 0, 20);
+
+                    var mostRecentPreviousSixMonthContracts = contracts;
+                    mostRecentPreviousSixMonthContracts = _.filter(mostRecentPreviousSixMonthContracts, contract => {
+                        var currentDate = new Date();
+                        var sixMonthDate = new Date();
+                        sixMonthDate.setMonth(sixMonthDate.getMonth() - 6);
+                        return (new Date(contract.CreationDate)).getTime() < currentDate.getTime()
+                            && (new Date(contract.CreationDate)).getTime() > sixMonthDate.getTime();
+                    });
+                    mostRecentPreviousSixMonthContracts = _.orderBy(mostRecentPreviousSixMonthContracts, ['CreationDate'], ['desc']);
+                    mostRecentPreviousSixMonthContracts = _.slice(mostRecentPreviousSixMonthContracts, 0, 20);
+
+                    console.log(mostRecentNextSixMonthContracts.length);
+
+                    response.render('home', {
+                        mostRecentExpiredContracts: mostRecentExpiredContracts,
+                        mostRecentCreatedContracts: mostRecentCreatedContracts,
+                        mostRecentNextSixMonthContracts: mostRecentNextSixMonthContracts,
+                        mostRecentPreviousSixMonthContracts: mostRecentPreviousSixMonthContracts,
+                        registerRequests: registerRequests
+                    });
+                }).catch(err => console.log(err));
+            } else {
+                response.render('home', {
+                    mostRecentExpiredContracts: mostRecentExpiredContracts,
+                    mostRecentCreatedContracts: mostRecentCreatedContracts,
+                    mostRecentNextSixMonthContracts: [],
+                    mostRecentPreviousSixMonthContracts: [],
+                    registerRequests: []
+                });
+            }
         });
     });
 
     app.get('/partners', function (request, response) {
-        db.userModel.findAll().then(users => {
+        db.contractModel.findAll(
+            {
+                attributes: ['PIB', 'IDPackage'],
+                group: ['PIB', 'IDPackage'],
+                include: [
+                    {
+                        model: db.packageModel,
+                    },
+                    {
+                        model: db.companyModel
+                    }
+                ]
+            }
+        ).then(result => {
+            var groupByPackageName = _.groupBy(result, element => {
+                return element.package.Name;
+            })
+            response.render('partners', { partnerPackages: groupByPackageName });
         });
-        response.render('partners', { partnerPackages: ['Srebrni', 'Zlatni', 'Platinium'] });
     });
 
     app.get('/packages', function (request, response) {
@@ -159,36 +258,57 @@ exports.setup = function (app) {
     app.get('/lectures', function (request, response) {
         db.lectureModel.findAll({
             order: [
-                ['DateTime', 'DESC']
-            ]
-        }).then(results => {
-            response.render('lectures', {
-                lectures: results
-            });
+                ['DateTime', 'ASC']
+            ],
+            where: {
+                DateTime: {
+                    [db.Sequelize.Op.gt]: new Date()
+                }
+            }
+        }).then(actualLectures => {
+            db.lectureModel.findAll({
+                order: [
+                    ['DateTime', 'DESC']
+                ],
+                where: {
+                    DateTime: {
+                        [db.Sequelize.Op.lt]: new Date()
+                    }
+                },
+                limit: 10
+            }).then(archiveLectures => {
+                response.render('lectures', {
+                    actualLectures: actualLectures,
+                    archiveLectures: archiveLectures
+                });
+            })
         });
     });
 
     app.get('/advertisement', function (request, response) {
-        db.userModel.findAll().then(users => {
-
-        });
-        response.render('advertisement', {
-            advertisement: [
+        db.advertisementModel.findAll({
+            include: [
                 {
-                    Title: "Naslov oglasa",
-                    Description: "avpijrea pribnaoejbnao dnbfadnigbiad gbapng dbapinnnnnn nnnnnnndbanbpa inbipafnbad nbadnb[ajdgn bandbgpn",
-                    ExpiredDate: "2018-07-20",
-                    Type: "Praksa",
-                    CompanyName: "Naziv kompanije"
-                },
-                {
-                    Title: "Naslov oglasa 2",
-                    Description: "avpijrea adl kkckckaapribn aoejbnaodn bfadnigbi a dgbapngdbap inn nnnnnnnnnnnd banbpainbipa fnbadnbadn b[ajdgnbandbgpn",
-                    ExpiredDate: "2013-07-20",
-                    Type: "Posao",
-                    CompanyName: "Naziv kompanije swa"
-                },
+                    model: db.inContactModel,
+                    include: [
+                        {
+                            model: db.companyModel
+                        }
+                    ]
+                }
+            ],
+            where: {
+                ExpireDate: {
+                    [db.Sequelize.Op.gt]: new Date()
+                }
+            },
+            order: [
+                ['CreationTime', 'DESC']
             ]
+        }).then(advertisements => {
+            response.render('advertisement', {
+                advertisements: advertisements
+            })
         });
     });
 
@@ -196,12 +316,11 @@ exports.setup = function (app) {
         delete req.session.username;
         res.redirect('/');
     });
-
     app.post('/create-company', function (request, response) {
         var logoLink = "";
         var logoFile = null;
 
-        if (request.files) {
+        if (request.files.length > 0) {
             logoFile = request.files.CompanyLogo;
             logoLink = './company_logo/' + request.body.CompanyPIB + '/' + logoFile.name;
         }
@@ -272,15 +391,13 @@ exports.setup = function (app) {
             response.send();
         }
 
-        console.log(JSON.stringify(request.body));
-
         var hostUrl = request.rawHeaders[index + 1];
         var splittedUrl = hostUrl.split("/")
         var pib = splittedUrl[splittedUrl.length - 1];
 
         var jsonFile = null
 
-        if (request.files) {
+        if (request.files.length > 0) {
             jsonFile = request.files.AddAdvertisementJsonFile;
         } else {
             response.statusCode = 401;
@@ -311,7 +428,7 @@ exports.setup = function (app) {
                     ExpireDate: element.RokPrijave,
                     CreationTime: new Date().toISOString().slice(0, 10)
                 }).then(function () {
-                }).catch(function(err) {
+                }).catch(function (err) {
                     console.log(err);
                     response.statusCode = 401;
                     response.send();
@@ -336,7 +453,7 @@ exports.setup = function (app) {
         var linkAdvertFile = "";
         var advertFile = null;
 
-        if (request.files) {
+        if (request.files.length > 0) {
             advertFile = request.files.AddAdvertisementFile;
             linkAdvertFile = './advertisements/' + new Date().getTime() + '/';
         }
@@ -384,7 +501,7 @@ exports.setup = function (app) {
 
         var csvFile = null
 
-        if (request.files) {
+        if (request.files.length > 0) {
             csvFile = request.files.AddLectureCsvFile;
             if (csvFile) {
                 csvFile.mv('./temp/' + csvFile.name, function (err) {
@@ -401,10 +518,6 @@ exports.setup = function (app) {
             .pipe(csvParser())
             .on('data', function (data) {
                 try {
-                    console.log(data);
-
-                    console.log(data.Naslov);
-
                     db.lectureModel.create({
                         Username: request.session.username,
                         PIB: pib,
@@ -449,7 +562,7 @@ exports.setup = function (app) {
         var linkLectureFile = "";
         var lectureFile = null;
 
-        if (request.files) {
+        if (request.files.length > 0) {
             lectureFile = request.files.LectureFile;
             linkLectureFile = './lectures/' + new Date().getTime() + '/';
         }
@@ -488,6 +601,115 @@ exports.setup = function (app) {
         });
     });
 
+    app.post('/add-money-contract', function (request, response) {
+        var index = request.rawHeaders.indexOf('Referer');
+        if (index < 0) {
+            response.statusCode = 401;
+            response.send();
+        }
+
+        var hostUrl = request.rawHeaders[index + 1];
+        var splittedUrl = hostUrl.split("/")
+        var pib = splittedUrl[splittedUrl.length - 1];
+
+        db.packageModel.findAll({
+            where: {
+                Name: request.body.MoneyContractPackageName
+            }
+        }).then(function (result) {
+            if (result.length > 0) {
+                var contractDate = new Date(request.body.MoneyContractDate);
+                db.contractModel.create({
+                    PIB: pib,
+                    IDPackage: result[0].IDPackage,
+                    IDContractStatus: request.body.moneyContractStatus,
+                    CreationDate: new Date(request.body.MoneyContractDate).toISOString().slice(0, 10),
+                    ExpiredDate: contractDate.setFullYear(contractDate.getFullYear() + result[0].Duration),
+                    AdditionalComment: request.body.MoneyContractAdditionalComment,
+                }).then(function (result) {
+                    db.moneyContractModel.create({
+                        IDContract: result.IDContract,
+                        Value: request.body.MoneyContractValue,
+                        IsPaymentFinished: (request.body.MoneyContractIsPaymentFinished) ? 1 : 0,
+                        IsInvoiceSent: (request.body.MoneyContractIsInvoiceSent) ? 1 : 0,
+                        PaymentDate: request.body.MoneyContractPaymentDate
+                    }).then(function () {
+                        response.statusCode = 200;
+                        response.end();
+                    })
+                });
+            } else {
+                response.statusCode = 401;
+                response.end();
+            }
+        });
+    });
+
+    app.post('/add-donate-contract', function (request, response) {
+        var index = request.rawHeaders.indexOf('Referer');
+        if (index < 0) {
+            response.statusCode = 401;
+            response.send();
+        }
+
+        console.log(JSON.stringify(request.body));
+
+        var hostUrl = request.rawHeaders[index + 1];
+        var splittedUrl = hostUrl.split("/")
+        var pib = splittedUrl[splittedUrl.length - 1];
+
+        db.packageModel.findAll({
+            where: {
+                Name: request.body.DonateContractPackageName
+            }
+        }).then(function (result) {
+            if (result.length > 0) {
+                var contractDate = new Date(request.body.DonateContractDate);
+                db.contractModel.create({
+                    PIB: pib,
+                    IDPackage: result[0].IDPackage,
+                    IDContractStatus: request.body.donateContractStatus,
+                    CreationDate: new Date(request.body.DonateContractDate).toISOString().slice(0, 10),
+                    ExpiredDate: contractDate.setFullYear(contractDate.getFullYear() + result[0].Duration),
+                    AdditionalComment: request.body.DonateContractAdditionalComment,
+                }).then(function (result) {
+                    db.donateContractModel.create({
+                        IDContract: result.IDContract,
+                        EstiamatedValue: parseInt(request.body.DonateContractValue, 10),
+                        Description: request.body.DonateContractDescription,
+                        Quantity: request.body.DonateContractQuantity,
+                        DeliveryDate: request.body.DonateContractDeliveryDate
+                    }).then(function () {
+                        response.statusCode = 200;
+                        response.end();
+                    })
+                });
+            } else {
+                response.statusCode = 401;
+                response.end();
+            }
+        });
+    });
+
+    app.post('/add-package', function(request, response) {
+        db.packageModel.create({
+            Name: request.body.AddPackageName,
+            Price: request.body.AddPackagePrice,
+            Duration: request.body.AddPackageDuration,
+            MaxCompanyNumbe: request.body.AddPackageMaxCompanyNumber,
+            Status: 'AKTIVAN',       
+        }).then((package) =>{
+            for (var i = 0; i < request.body.AddPackageItemName.length; i++) {
+                package.createPackageitem({
+                    Name: request.body.AddPackageItemName[i],
+                    Description: request.body.AddPackageItemDescription[i]
+                });
+            }
+            response.statusCode = 200;
+            response.send();
+        });
+    });
+
     app.get('/search-company', function (request, response) {
         var packageName = request.query.SearchPackageName;
         var companyName = request.query.SearchCompanyName;
@@ -501,7 +723,10 @@ exports.setup = function (app) {
                     attributes: ['PIB', 'Name'],
                     where: {
                         Name: db.sequelize.where(
-                            db.sequelize.fn('LOWER', db.sequelize.col('Company.Name')),
+                            db.sequelize.fn(
+                                'LOWER', 
+                                db.sequelize.col('Company.Name')
+                            ),
                             'LIKE', '%' + companyName.toLowerCase() + '%')
                     }
                 },
@@ -510,11 +735,15 @@ exports.setup = function (app) {
                     attributes: [],
                     where: {
                         Name: db.sequelize.where(
-                            db.sequelize.fn('LOWER', db.sequelize.col('Package.Name')),
+                            db.sequelize.fn(
+                                'LOWER',
+                                db.sequelize.col('Package.Name')
+                            ),
                             'LIKE', '%' + packageName.toLowerCase() + '%')
                     }
-                }
-            ]
+                },
+            ],
+            limit: 20                        
         }).then(function (result) {
             var uniqueList = _.uniqBy(result, 'company.PIB');
             response.statusCode = 200;
@@ -554,7 +783,9 @@ exports.setup = function (app) {
             response.statusCode = 200;
             console.log(JSON.stringify(result));
             if (result.length > 0) {
-                response.render('company-info', { company: result[0] });
+                db.contractStatusModel.findAll().then(function (statusList) {
+                    response.render('company-info', { company: result[0], contractStatusList: statusList });
+                })
             }
         }).catch(function (err) {
             response.statusCode = 401;

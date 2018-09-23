@@ -54,7 +54,7 @@
     <div class="row">
       <div class="col s12">
         <div class="row">
-          <div class="col s6 l4 offset-l2">
+          <div class="col s12 m6 l4 offset-l2">
             <h6 class="center-align">NAJSKORIJE POTPISANI UGOVORI</h6>
             <table>
               <thead>
@@ -65,17 +65,17 @@
                 <% for(var i=0; i < mostRecentCreatedContracts.length; i++) { %>
                   <tr>
                     <td>
-                      <%= mostRecentCreatedContracts[i].CompanyName %>
+                      <%= mostRecentCreatedContracts[i].company.Name %>
                     </td>
                     <td>
-                      <%= mostRecentCreatedContracts[i].CreatedDate %>
+                      <%= mostRecentCreatedContracts[i].CreationDate %>
                     </td>
                   </tr>
                   <% } %>
               </tbody>
             </table>
           </div>
-          <div class="col s6 l4">
+          <div class="col s12 m6 l4">
             <h6 class="center-align">UGOVORI KOJI USKORO ISTICU</h6>
             <table>
               <thead>
@@ -86,7 +86,7 @@
                 <% for(var i=0; i < mostRecentExpiredContracts.length; i++) { %>
                   <tr>
                     <td>
-                      <%= mostRecentExpiredContracts[i].CompanyName %>
+                      <%= mostRecentExpiredContracts[i].company.Name %>
                     </td>
                     <td>
                       <%= mostRecentExpiredContracts[i].ExpiredDate %>
@@ -104,26 +104,38 @@
                 <a class="active" href="#tab-dashboard">Kontrolna tabla</a>
               </li>
               <li class="tab col s2">
-                <a class="active" href="#tab-add-contract">Dodaj ugovor</a>
+                <a href="#tab-register-requests">Zahtevi registracije</a>
               </li>
               <li class="tab col s2">
-                <a class="active" href="#tab-add-company">Dodaj kompaniju</a>
+                <a href="#tab-add-company">Dodaj kompaniju</a>
+              </li>
+              <li class="tab col s2">
+                <a href="#tab-add-package">Dodaj paket</a>
               </li>
               <li class="tab col s2">
                 <a href="#tab-search-company">Pretraga</a>
               </li>
             </ul>
             <div id="tab-dashboard" class="col s12 tab-content">
-              <% include tab-dashboard.ejs %>
-            </div>
-            <div id="tab-add-contract" class="col s12 tab-content">
-              <% include tab-add-contract.ejs %>
+              <h5 class="center-align">Vremenski dijagram</h5>
+              <%- include("tab-dashboard", {
+                mostRecentNextSixMonthContracts: mostRecentNextSixMonthContracts,
+                mostRecentPreviousSixMonthContracts: mostRecentPreviousSixMonthContracts,
+              }) %>
             </div>
             <div id="tab-add-company" class="col s12 tab-content">
               <% include tab-add-company.ejs %>
             </div>
+            <div id="tab-add-package" class="col s12 tab-content">
+              <% include tab-add-package.ejs %>
+            </div>
             <div id="tab-search-company" class="col s12 tab-content">
               <% include tab-search-company.ejs %>
+            </div>
+            <div id="tab-register-requests" class="col s12 tab-content">
+              <%- include("tab-registration-requests", {
+                registerRequests: registerRequests
+              }) %>
             </div>
           </div>
         </div>
@@ -131,4 +143,5 @@
     </div>
     <% include footer.ejs %>
 </body>
+
 </html>

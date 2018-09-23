@@ -46,7 +46,7 @@
                 <h5>O predavacu</h5>
               </div>
             </div>
-            <% for(var i=0; i < lectures.length; i++) { %>
+            <% for(var i=0; i < actualLectures.length; i++) { %>
               <div class="row border">
                 <div class="col s8 border-right">
                   <table>
@@ -54,31 +54,33 @@
                       <tr>
                         <td class="left-td">Naslov</td>
                         <td>
-                          <%= lectures[i].TitleSerbian %>
-                          <% if (lectures[i].TitleEnglish) { %>
-                            (<%= lectures[i].TitleEnglish %>)
-                          <% } %> 
+                          <%= actualLectures[i].TitleSerbian %>
+                            <% if (actualLectures[i].TitleEnglish) { %>
+                              (
+                              <%= actualLectures[i].TitleEnglish %>)
+                                <% } %>
                         </td>
                       </tr>
                       <tr>
                         <td class="left-td">Opis</td>
                         <td>
-                          <%= lectures[i].DescriptionSerbian %>
-                          <% if (lectures[i].DescriptionEnglish) { %>
-                            (<%= lectures[i].DescriptionEnglish %>)
-                          <% } %> 
-                          </td>
+                          <%= actualLectures[i].DescriptionSerbian %>
+                            <% if (actualLectures[i].DescriptionEnglish) { %>
+                              (
+                              <%= actualLectures[i].DescriptionEnglish %>)
+                                <% } %>
+                        </td>
                       </tr>
                       <tr>
                         <td class="left-td">Datum</td>
                         <td>
-                          <%= lectures[i].DateTime.toLocaleString() %>
+                          <%= actualLectures[i].DateTime.toLocaleString() %>
                         </td>
                       </tr>
                       <tr>
                         <td class="left-td">Sala</td>
                         <td>
-                          <%= lectures[i].Hall %>
+                          <%= actualLectures[i].Hall %>
                         </td>
                       </tr>
                     </tbody>
@@ -90,20 +92,99 @@
                       <tr>
                         <td class="left-td">Ime</td>
                         <td>
-                          <%= lectures[i].FirstName %>
+                          <%= actualLectures[i].FirstName %>
                         </td>
                       </tr>
                       <tr>
                         <td class="left-td">Prezime</td>
                         <td>
-                          <%= lectures[i].LastName %>
+                          <%= actualLectures[i].LastName %>
                         </td>
                       </tr>
                     </tbody>
                   </table>
                   <p class="left-td">Biografija</p>
                   <p>
-                    <%= lectures[i].Biography %>
+                    <%= actualLectures[i].Biography %>
+                  </p>
+                </div>
+              </div>
+              <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 m8 offset-m2">
+        <h4 class="center-align">ARHIVA PREDAVANJA</h4>
+        <div class="row">
+          <div class="col s12">
+            <div class="row">
+              <div class="col s8">
+                <h5>Detalji o predavanju</h5>
+              </div>
+              <div class="col s4">
+                <h5>O predavacu</h5>
+              </div>
+            </div>
+            <% for(var i=0; i < archiveLectures.length; i++) { %>
+              <div class="row border">
+                <div class="col s8 border-right">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td class="left-td">Naslov</td>
+                        <td>
+                          <%= archiveLectures[i].TitleSerbian %>
+                            <% if (archiveLectures[i].TitleEnglish) { %>
+                              (<%= archiveLectures[i].TitleEnglish %>)
+                          <% } %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left-td">Opis</td>
+                        <td>
+                          <%= archiveLectures[i].DescriptionSerbian %>
+                            <% if (archiveLectures[i].DescriptionEnglish) { %>
+                              (<%= archiveLectures[i].DescriptionEnglish %>)
+                            <% } %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left-td">Datum</td>
+                        <td>
+                          <%= archiveLectures[i].DateTime.toLocaleString() %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left-td">Sala</td>
+                        <td>
+                          <%= archiveLectures[i].Hall %>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="col s4">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td class="left-td">Ime</td>
+                        <td>
+                          <%= archiveLectures[i].FirstName %>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="left-td">Prezime</td>
+                        <td>
+                          <%= archiveLectures[i].LastName %>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p class="left-td">Biografija</p>
+                  <p>
+                    <%= archiveLectures[i].Biography %>
                   </p>
                 </div>
               </div>

@@ -14,14 +14,30 @@ body, html {
     padding-bottom: 50px;
 }
 
+.company-logo-small {
+    height: 50px;
+    width: 50px;
+}
+
+.company-logo-large {
+    height: 150px;
+    width: auto;
+}
+
+.company-logo-wrapper {
+    padding: 30px 0 !important;
+}
+
+.company-logo-large  img {
+    height: 100%;
+    width: 100%;
+}
+
 .partner-package {
-    height: 70px;
     background-color: #203e6b;
     color: white;
     border-radius: 26px;
     text-align: center;
-    margin: 8px;
-    padding: 20px !important;
 }
 
 .error-message {
@@ -272,6 +288,12 @@ select:-webkit-autofill {
 /* icon prefix focus color */
 .input-field .prefix.active {
   color: #000;
+}
+
+th {
+    background-color: white;
+    color: #203e6b;
+    border-radius: 0;
 }
 
 #main_picture_gallery {

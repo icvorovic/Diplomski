@@ -1,6 +1,7 @@
 /*
     Module dependecies.
 */
+var express = require('express');
 var app = require('express')();
 var server  = require('http').createServer(app);
 var path = require('path')
@@ -20,7 +21,12 @@ let sessionOptions = {
 };
 
 app.use(fileUpload());
-app.use( require('express').static( "public" ) );
+app.use( express.static( "public" ) );
+app.use("/company_logo", express.static(path.join(__dirname, 'company_logo')));
+app.use("/lectures", express.static(path.join(__dirname, 'lectures')));
+app.use("/profile_picture", express.static(path.join(__dirname, 'profile_picture')));
+app.use("/advertisements", express.static(path.join(__dirname, 'advertisements')));
+
 app.use(session(sessionOptions));
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
